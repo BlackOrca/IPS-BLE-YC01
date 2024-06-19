@@ -1,0 +1,12 @@
+{
+    "id": "{A8F7292F-84B5-0663-FE83-9DEDF6CA1A7C}",
+    "name": "BLEYC01",
+    "type": 3,
+    "vendor": "",
+    "aliases": [],
+    "parentRequirements": ["{C6D2AEB3-6E1F-4B2E-8E69-3A1A00246850}"],
+    "childRequirements": [],
+    "implemented": [],
+    "prefix": "BLEYC",
+    "url": "https://github.com/BlackOrca/IPS-BLE-YC01"
+}

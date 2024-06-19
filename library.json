@@ -1,0 +1,12 @@
+{
+    "id": "{B9005890-72B3-D5B0-BE6E-813EDFD5C044}",
+    "name": "BLEYC01",
+    "author": "BlackOrca",
+    "url": "https://github.com/BlackOrca/IPS-BLE-YC01",
+    "compatibility": {
+        "version": "7.0"
+    },
+    "version": "1.0",
+    "build": 1,
+    "date": 0
+}
