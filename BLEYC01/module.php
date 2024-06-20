@@ -50,7 +50,7 @@ declare(strict_types=1);
         	// $this->SetReceiveDataFilter($filter);
 			//"MAC":"C00000036F90"		
 
-			$this->SetReceiveDataFilter('.*"MAC":"' . $this->ReadPropertyString('MAC') . '.*');
+			$this->SetReceiveDataFilter('.*' . $this->ReadPropertyString('MAC') . '".*');
 
 			if (($this->HasActiveParent()) && (IPS_GetKernelRunlevel() == KR_READY)) {
 				$this->RequestData($_IPS['TARGET']);
