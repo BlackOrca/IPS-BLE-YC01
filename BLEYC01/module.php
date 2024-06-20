@@ -58,6 +58,7 @@ declare(strict_types=1);
 
 		public function ReceiveData($JSONString)
 		{
+			$this->SendDebug('ReceiveData', $JSONString, 0);
 			if(empty($this->ReadPropertyString('TasmotaDeviceName')) || empty($this->ReadPropertyString('MAC')))
 			{
 				$this->SendDebug("BLEYC01", "TasmotaDeviceName oder MAC Adresse nicht gesetzt", 0);
@@ -68,7 +69,7 @@ declare(strict_types=1);
 
 			if(!is_array($data))
 				return;
-			
+
 			if(!array_key_exists('Payload', $data))
 				return;
 
@@ -77,7 +78,7 @@ declare(strict_types=1);
 				$data['Payload'] = utf8_decode($data['Payload']);
 			}
 
-			$contains = '"Topic":"' . self::ResponseTopic . '/' . $this->ReadPropertyString('TasmotaDeviceName') . '/' . self::BleResultPostfix;
+			$contains = '"Topic":"' . self::ResponseTopic . '\/' . $this->ReadPropertyString('TasmotaDeviceName') . '\/' . self::BleResultPostfix;
 			$this->SendDebug('Contains Pattern', $contains, 0);
 			if(!array_key_exists($contains, $data))
 				return;
