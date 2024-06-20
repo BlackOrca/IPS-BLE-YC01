@@ -74,7 +74,7 @@ declare(strict_types=1);
 			$this->SendDebug('DataPayload', $data->Payload, 0);
 
 			$payload = json_decode($data->Payload);
-			$this->SendDebug('Payload', $payload, 0);
+			$this->SendDebug('Payload', var_dump($payload), 0);
 
 			$bleOperation = @$payload->BLEOperation;
 			if($bleOperation === false)
@@ -82,7 +82,7 @@ declare(strict_types=1);
 				$this->SendDebug('BLEOperation', 'No BLEOperation found', 0);
 				return "OK not for me!";
 			}
-			
+
 			return "OK von " . $this->InstanceID;
 
 			if(!array_key_exists('BLEOperation', $payload))
