@@ -39,7 +39,7 @@ declare(strict_types=1);
 			$this->ConnectParent(self::MqttParent);
 			$this->SetTimerInterval('RequestTimer', $this->ReadPropertyInteger('RequestInterval') * 1000 * 60);
 
-			//$filterResult = preg_quote('"Topic":"' . self::ResponseTopic . '/' . $this->ReadPropertyString('TasmotaDeviceName') . '/' . self::ResultPostfix);
+			$filterResult = preg_quote('"Topic":"' . self::ResponseTopic . '/' . $this->ReadPropertyString('TasmotaDeviceName') . '/' . self::BleResultPostfix);
 			//$filterBle = preg_quote('"Topic":"' . self::ResponseTopic . '/' . $this->ReadPropertyString('TasmotaDeviceName') . '/' . self::BleResultPostfix);
 			
 			// $filter1 = preg_quote('"Topic":"' . self::ResponseTopic . '/' . $this->ReadPropertyString('TasmotaDeviceName') . '/' . self::BleResultPostfix . '"');
@@ -50,8 +50,8 @@ declare(strict_types=1);
         	// $this->SetReceiveDataFilter($filter);
 			//"MAC":"C00000036F90"		
 
-			$this->SendDebug('ReceiveDataFilter', preg_quote('.*' . $this->ReadPropertyString('MAC') . '".*'), 0);
-			$this->SetReceiveDataFilter(preg_quote('.*' . $this->ReadPropertyString('MAC') . '".*'));
+			$this->SendDebug('ReceiveDataFilter', '.*' . $filterResult . '.*', 0);
+			$this->SetReceiveDataFilter('.*' . $filterResult . '.*');
 
 			if (($this->HasActiveParent()) && (IPS_GetKernelRunlevel() == KR_READY)) {
 				$this->RequestData($_IPS['TARGET']);
