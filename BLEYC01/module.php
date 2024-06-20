@@ -73,6 +73,8 @@ declare(strict_types=1);
 			$data = json_decode($JSONString, true);
 			$this->SendDebug('Data', var_dump($data), 0);
 
+			return;
+			
 			if (IPS_GetKernelDate() > 1670886000) 
 			{
 				$data['Payload'] = utf8_decode($data['Payload']);
