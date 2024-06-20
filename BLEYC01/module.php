@@ -71,6 +71,12 @@ declare(strict_types=1);
 			{
 				$data['Payload'] = utf8_decode($data['Payload']);
 			}
+
+			$contains = '"Topic":"' . self::ResponseTopic . '/' . $this->ReadPropertyString('TasmotaDeviceName') . '/' . self::BleResultPostfix;
+			$this->SendDebug('Contains Pattern', $contains, 0);
+			if(!array_key_exists($contains, $data))
+				return;
+
 			$payload = json_decode($data['Payload'], true);
 			if(!array_key_exists('BLEOperation', $payload))
 				return;
