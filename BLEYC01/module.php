@@ -59,6 +59,9 @@ declare(strict_types=1);
 		public function ReceiveData($JSONString)
 		{
 			$this->SendDebug('ReceiveData', $JSONString, 0);
+
+			return;
+
 			if(empty($this->ReadPropertyString('TasmotaDeviceName')) || empty($this->ReadPropertyString('MAC')))
 			{
 				$this->SendDebug("BLEYC01", "TasmotaDeviceName oder MAC Adresse nicht gesetzt", 0);
