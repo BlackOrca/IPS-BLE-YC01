@@ -20,6 +20,7 @@ declare(strict_types=1);
 			$this->RegisterPropertyString("TasmotaDeviceName", "");
 			$this->RegisterPropertyString("MAC", "");
 			$this->RegisterPropertyInteger("RequestInterval", 30);
+			$this->RegisterTimer('RequestTimer', 0, 'BLEYC01_RequestData($_IPS[\'TARGET\']);');
 
 			$this->ConnectParent(self::MqttParent);
 		}
@@ -36,7 +37,7 @@ declare(strict_types=1);
 			parent::ApplyChanges();
 
 			$this->ConnectParent(self::MqttParent);
-			$this->RegisterTimer('RequestTimer', $this->ReadPropertyInteger('RequestInterval') * 1000 * 60, 'BLEYC01_RequestData($_IPS[\'TARGET\']);');
+			$this->SetTimerInterval('RequestTimer', $this->ReadPropertyInteger('RequestInterval') * 1000 * 60);
 
 			$filterResult = preg_quote('"Topic":"' . self::ResponseTopic . '/' . $this->ReadPropertyString('TasmotaDeviceName') . '/' . self::ResultPostfix . '"');
 			$filterBle = preg_quote('"Topic":"' . self::ResponseTopic . '/' . $this->ReadPropertyString('TasmotaDeviceName') . '/' . self::BleResultPostfix . '"');
