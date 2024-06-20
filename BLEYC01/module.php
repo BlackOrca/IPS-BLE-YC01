@@ -42,8 +42,9 @@ declare(strict_types=1);
 			//$filterResult = preg_quote('"Topic":"' . self::ResponseTopic . '/' . $this->ReadPropertyString('TasmotaDeviceName') . '/' . self::ResultPostfix);
 			//$filterBle = preg_quote('"Topic":"' . self::ResponseTopic . '/' . $this->ReadPropertyString('TasmotaDeviceName') . '/' . self::BleResultPostfix);
 			
-			$this->SendDebug('ReceiveDataFilter', '.*' . $this->ReadPropertyString('TasmotaDeviceName') . '.*', 0);
-        	$this->SetReceiveDataFilter('.*' . $this->ReadPropertyString('TasmotaDeviceName') . '.*');
+			$filter = '.*(' . $this->ReadPropertyString('TasmotaDeviceName') . '|' . $this->ReadPropertyString('MAC') ').*';
+			$this->SendDebug('ReceiveDataFilter', $filter, 0);
+        	$this->SetReceiveDataFilter($filter);
 
 			if (($this->HasActiveParent()) && (IPS_GetKernelRunlevel() == KR_READY)) {
 				$this->RequestData($_IPS['TARGET']);
