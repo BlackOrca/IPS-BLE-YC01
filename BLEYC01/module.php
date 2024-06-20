@@ -75,13 +75,10 @@ declare(strict_types=1);
 			{
 				$data['Payload'] = utf8_decode($data['Payload']);
 			}
-
-			$this->SendDebug('Data', var_dump($data), 0);
-
-			return "OK von " . $this->InstanceID;
-
 			$payload = json_decode($data['Payload'], true);
 			$this->SendDebug('Payload', var_dump($payload), 0);
+
+			return "OK von " . $this->InstanceID;
 
 			if(!array_key_exists('BLEOperation', $payload))
 				return;
