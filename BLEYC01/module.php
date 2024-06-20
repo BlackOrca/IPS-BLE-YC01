@@ -73,8 +73,12 @@ declare(strict_types=1);
 			$data = json_decode($JSONString);
 			$this->SendDebug('DataPayload', $data->Payload, 0);
 
-			$payload = json_decode($data->Payload);
-			$this->SendDebug('Payload', var_dump($payload), 0);
+			$payload = @json_decode($data->Payload);
+			if($payload === false)
+			{
+				$this->SendDebug('Payload', 'No Payload found', 0);
+				return;
+			}
 
 			$bleOperation = @$payload->BLEOperation;
 			if($bleOperation === false)
