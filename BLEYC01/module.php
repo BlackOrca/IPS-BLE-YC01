@@ -74,7 +74,7 @@ declare(strict_types=1);
 			$this->SendDebug('DataPayload', $data->Payload, 0);
 
 			$payload = @json_decode($data->Payload, true);
-			if($payload === false)
+			if($payload === false || $payload == null)
 			{
 				$this->SendDebug('Payload', 'No Payload found', 0);
 				return;
