@@ -44,6 +44,7 @@ declare(strict_types=1);
 			
 			$this->SendDebug('ReceiveDataFilter', '.*(' . $filterResult . '|' . $filterBle . ').*', 0);
         	$this->SetReceiveDataFilter('.*(' . $filterResult . '|' . $filterBle . ').*');
+			$this->RequestData($_IPS['TARGET']);
 		}
 
 		public function ReceiveData($JSONString)
