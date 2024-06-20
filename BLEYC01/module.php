@@ -64,9 +64,11 @@ declare(strict_types=1);
 				return;
 			}
 
-			// Empfangene Daten vom Gateway/Splitter
 			$data = json_decode($JSONString);
 
+			if(!array_key_exists('Payload', $data))
+				return;
+			
 			if (IPS_GetKernelDate() > 1670886000) 
 			{
 				$data['Payload'] = utf8_decode($data['Payload']);
