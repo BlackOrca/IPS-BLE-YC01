@@ -71,7 +71,10 @@ declare(strict_types=1);
 			}
 
 			$data = json_decode($JSONString);
+			$this->SendDebug('Data', var_dump($data), 0);
 
+			return;
+			
 			if (IPS_GetKernelDate() > 1670886000) 
 			{
 				$data['Payload'] = utf8_decode($data['Payload']);
@@ -79,7 +82,7 @@ declare(strict_types=1);
 
 			$payload = json_decode($data['Payload'], true);
 			$this->SendDebug('Payload', var_dump($payload), 0);
-			
+
 			if(!array_key_exists('BLEOperation', $payload))
 				return;
 			
