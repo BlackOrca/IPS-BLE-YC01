@@ -48,6 +48,9 @@ declare(strict_types=1);
 			// $filter = '.*(.*' . $filter1 . ')(.*' . $filter2 . ').*';
 			// $this->SendDebug('ReceiveDataFilter', $filter, 0);
         	// $this->SetReceiveDataFilter($filter);
+			//"MAC":"C00000036F90"		
+
+			$this->SetReceiveDataFilter('.*"MAC":"' . $this->ReadPropertyString('MAC') . '.*');
 
 			if (($this->HasActiveParent()) && (IPS_GetKernelRunlevel() == KR_READY)) {
 				$this->RequestData($_IPS['TARGET']);
