@@ -1,5 +1,22 @@
 {
-    "elements": [],
+    "elements": [
+        {
+            "type": "ValidationTextBox",
+            "name": "MAC",
+            "caption": "MAC without colons of the BLE-YC01 for example: 123456789012"
+        },
+        {
+            "type": "ValidationTextBox",
+            "name": "Tasmota MQTT Name",
+            "caption": "MQTT-Name of the Tasmota Device"
+        },
+        {
+            "type": "NumberSpinner",
+            "name": "RequestInterval",
+            "caption": "Request interval in minutes",
+            "value": 30
+        }
+    ],
     "actions": [        
         {
             "type": "RowLayout",
