@@ -38,8 +38,8 @@ declare(strict_types=1);
 			$this->ConnectParent(self::MqttParent);
 			$this->RegisterTimer('RequestTimer', $this->ReadPropertyInteger('RequestInterval') * 1000 * 60, 'BLEYC01_RequestData($_IPS[\'TARGET\']);');
 
-			$filterResult = preg_quote('"Topic":"' . self::ResponseTopic . '/' . $this->ReadPropertyString('TopicTasmotaDevice') . '/' . self::ResultPostfix . '"');
-			$filterBle = preg_quote('"Topic":"' . self::ResponseTopic . '/' . $this->ReadPropertyString('TopicTasmotaDevice') . '/' . self::BleResultPostfix . '"');
+			$filterResult = preg_quote('"Topic":"' . self::ResponseTopic . '/' . $this->ReadPropertyString('TasmotaDeviceName') . '/' . self::ResultPostfix . '"');
+			$filterBle = preg_quote('"Topic":"' . self::ResponseTopic . '/' . $this->ReadPropertyString('TasmotaDeviceName') . '/' . self::BleResultPostfix . '"');
 			
 			$this->SendDebug('Filter ', '.*(' . $filterResult . '|' . $filterBle . ').*', 0);
         	$this->SetReceiveDataFilter('.*(' . $filterResult . '|' . $filterBle . ').*');
