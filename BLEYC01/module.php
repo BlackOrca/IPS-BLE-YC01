@@ -70,13 +70,11 @@ declare(strict_types=1);
 
 			$this->SendDebug('ReceiveData', $JSONString, 0);
 
-			$data = json_decode($JSONString, true);
-			if (IPS_GetKernelDate() > 1670886000) 
-			{
-				$data['Payload'] = utf8_decode($data['Payload']);
-			}
+			$data = json_decode($JSONString, true);			
+			$data['Payload'] = utf8_decode($data['Payload']);			
 			$payload = json_decode($data['Payload'], true);
-			$this->SendDebug('Payload', var_dump($payload), 0);
+
+			$this->SendDebug('Payload', $payload, 0);
 
 			return "OK von " . $this->InstanceID;
 
