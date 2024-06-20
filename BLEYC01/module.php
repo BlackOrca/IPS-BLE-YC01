@@ -70,15 +70,15 @@ declare(strict_types=1);
 				return;
 			}
 
-			$data = json_decode($JSONString, true);
-			$this->SendDebug('Data', var_dump($data), 0);
+			$data = json_decode($JSONString, true);		
 
-			return;
-			
 			if (IPS_GetKernelDate() > 1670886000) 
 			{
 				$data['Payload'] = utf8_decode($data['Payload']);
 			}
+
+			$this->SendDebug('Data', var_dump($data), 0);
+			return;
 
 			$payload = json_decode($data['Payload'], true);
 			$this->SendDebug('Payload', var_dump($payload), 0);
