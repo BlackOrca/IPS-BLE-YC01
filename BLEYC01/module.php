@@ -76,7 +76,7 @@ declare(strict_types=1);
 
 			$payload = json_decode($dataPayload);
 
-			$this->SendDebug('Payload', $payload, 0);
+			$this->SendDebug('Payload', var_dump($payload), 0);
 
 			return "OK von " . $this->InstanceID;
 
