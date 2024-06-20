@@ -83,7 +83,11 @@ declare(strict_types=1);
 			$bleOperation = @$payload['BLEOperation'];
 			if($bleOperation === false || $bleOperation == null)
 			{
-				$this->SendDebug('BLEOperation', 'No BLEOperation found', 0);
+				return "OK not for me!";
+			}
+
+			if($bleOperation['MAC'] != $this->ReadPropertyString('MAC'))
+			{
 				return "OK not for me!";
 			}
 			
