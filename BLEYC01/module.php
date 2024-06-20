@@ -78,6 +78,8 @@ declare(strict_types=1);
 			}
 
 			$payload = json_decode($data['Payload'], true);
+			$this->SendDebug('Payload', var_dump($payload), 0);
+			
 			if(!array_key_exists('BLEOperation', $payload))
 				return;
 			
