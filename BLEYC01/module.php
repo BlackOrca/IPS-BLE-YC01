@@ -81,13 +81,11 @@ declare(strict_types=1);
 			}
 
 			$bleOperation = @$payload->BLEOperation;
-			if($bleOperation === false)
+			if($bleOperation === false || $bleOperation == null)
 			{
 				$this->SendDebug('BLEOperation', 'No BLEOperation found', 0);
 				return "OK not for me!";
-			}
-
-			$this->SendDebug('BLEOperation', $bleOperation->read, 0);
+			}		
 
 			return "OK von " . $this->InstanceID;
 
