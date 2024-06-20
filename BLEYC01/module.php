@@ -73,10 +73,11 @@ declare(strict_types=1);
 			$data = json_decode($JSONString);
 			//$dataPayload = utf8_decode($data->Payload);
 			$this->SendDebug('DataPayload', $data->Payload, 0);
+			$this->SendDebug('DataPayloadArray', $data['Payload'], 0);
 
 			$payload = json_decode($data->Payload);
 
-			$this->SendDebug('Payload', var_dump($payload), 0);
+			$this->SendDebug('Payload', $payload, 0);
 
 			return "OK von " . $this->InstanceID;
 
