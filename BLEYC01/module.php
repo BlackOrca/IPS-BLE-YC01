@@ -73,14 +73,14 @@ declare(strict_types=1);
 			$data = json_decode($JSONString);
 			$this->SendDebug('DataPayload', $data->Payload, 0);
 
-			$payload = @json_decode($data->Payload);
+			$payload = @json_decode($data->Payload, true);
 			if($payload === false)
 			{
 				$this->SendDebug('Payload', 'No Payload found', 0);
 				return;
 			}
 
-			$bleOperation = @$payload->BLEOperation;
+			$bleOperation = @$payload['BLEOperation'];
 			if($bleOperation === false || $bleOperation == null)
 			{
 				$this->SendDebug('BLEOperation', 'No BLEOperation found', 0);
@@ -88,9 +88,6 @@ declare(strict_types=1);
 			}		
 
 			return "OK von " . $this->InstanceID;
-
-			if(!array_key_exists('BLEOperation', $payload))
-				return;
 			
 			$this->SendDebug('BLEOperation', $payload['BLEOperation'], 0);
 			$this->SendDebug('Payload', $payload, 0);
