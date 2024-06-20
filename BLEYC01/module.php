@@ -39,11 +39,11 @@ declare(strict_types=1);
 			$this->ConnectParent(self::MqttParent);
 			$this->SetTimerInterval('RequestTimer', $this->ReadPropertyInteger('RequestInterval') * 1000 * 60);
 
-			$filterResult = preg_quote("Topic:" . self::ResponseTopic . "/" . $this->ReadPropertyString('TasmotaDeviceName') . "/" . self::ResultPostfix);
-			$filterBle = preg_quote("Topic:" . self::ResponseTopic . "/" . $this->ReadPropertyString('TasmotaDeviceName') . "/" . self::BleResultPostfix);
+			$filterResult = preg_quote('"Topic":"' . self::ResponseTopic . '/' . $this->ReadPropertyString('TasmotaDeviceName') . '/' . self::ResultPostfix);
+			$filterBle = preg_quote('"Topic":"' . self::ResponseTopic . '/' . $this->ReadPropertyString('TasmotaDeviceName') . '/' . self::BleResultPostfix);
 			
-			$this->SendDebug('ReceiveDataFilter', '*(' . $filterResult . '|' . $filterBle . ').*', 0);
-        	$this->SetReceiveDataFilter('*(' . $filterResult . '|' . $filterBle . ').*');
+			$this->SendDebug('ReceiveDataFilter', '.*(' . $filterResult . '|' . $filterBle . ').*', 0);
+        	$this->SetReceiveDataFilter('.*(' . $filterResult . '|' . $filterBle . ').*');
 		}
 
 		public function ReceiveData($JSONString)
