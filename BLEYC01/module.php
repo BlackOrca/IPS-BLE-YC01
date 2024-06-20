@@ -42,12 +42,12 @@ declare(strict_types=1);
 			//$filterResult = preg_quote('"Topic":"' . self::ResponseTopic . '/' . $this->ReadPropertyString('TasmotaDeviceName') . '/' . self::ResultPostfix);
 			//$filterBle = preg_quote('"Topic":"' . self::ResponseTopic . '/' . $this->ReadPropertyString('TasmotaDeviceName') . '/' . self::BleResultPostfix);
 			
-			$filter1 = preg_quote('"Topic":"' . self::ResponseTopic . '/' . $this->ReadPropertyString('TasmotaDeviceName') . '/' . self::BleResultPostfix . '"');
-			$filter2 = preg_quote('"Payload":"BLEOperation');
+			// $filter1 = preg_quote('"Topic":"' . self::ResponseTopic . '/' . $this->ReadPropertyString('TasmotaDeviceName') . '/' . self::BleResultPostfix . '"');
+			// $filter2 = preg_quote('"Payload":"BLEOperation');
 
-			$filter = '.*(.*' . $filter1 . ')(.*' . $filter2 . ').*';
-			$this->SendDebug('ReceiveDataFilter', $filter, 0);
-        	$this->SetReceiveDataFilter($filter);
+			// $filter = '.*(.*' . $filter1 . ')(.*' . $filter2 . ').*';
+			// $this->SendDebug('ReceiveDataFilter', $filter, 0);
+        	// $this->SetReceiveDataFilter($filter);
 
 			if (($this->HasActiveParent()) && (IPS_GetKernelRunlevel() == KR_READY)) {
 				$this->RequestData($_IPS['TARGET']);
@@ -73,12 +73,12 @@ declare(strict_types=1);
 			{
 				$data['Payload'] = utf8_decode($data['Payload']);
 			}
-			
-			$this->SendDebug('Topic', $data['Topic'], 0);
-            $this->SendDebug('Payload', $data['Payload'], 0);
-
 			$payload = json_decode($data['Payload'], true);
-			$this->SendDebug('Payload decoded', $payload, 0);
+			if(!array_key_exists('BLEOperation', $payload))
+				return;
+			
+			$this->SendDebug('BLEOperation', $payload['BLEOperation'], 0);
+			$this->SendDebug('Payload', $payload, 0);
 
 			return "OK von " . $this->InstanceID;
 		}
