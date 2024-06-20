@@ -42,7 +42,10 @@ declare(strict_types=1);
 			//$filterResult = preg_quote('"Topic":"' . self::ResponseTopic . '/' . $this->ReadPropertyString('TasmotaDeviceName') . '/' . self::ResultPostfix);
 			//$filterBle = preg_quote('"Topic":"' . self::ResponseTopic . '/' . $this->ReadPropertyString('TasmotaDeviceName') . '/' . self::BleResultPostfix);
 			
-			$filter = '.*(' . preg_quote($this->ReadPropertyString('TasmotaDeviceName')) . '|' . preg_quote($this->ReadPropertyString('MAC')) . ').*';
+			$filter1 = preg_quote('"Topic":"' . self::ResponseTopic . '/' . $this->ReadPropertyString('TasmotaDeviceName') . '/' . self::BleResultPostfix . '"');
+			$filter2 = preg_quote('BLEOperation');
+
+			$filter = '.*(' . $filter1 . ')(' . $filter2 . ').*';
 			$this->SendDebug('ReceiveDataFilter', $filter, 0);
         	$this->SetReceiveDataFilter($filter);
 
