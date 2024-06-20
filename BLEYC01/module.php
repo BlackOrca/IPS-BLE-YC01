@@ -71,12 +71,10 @@ declare(strict_types=1);
 			$this->SendDebug('ReceiveData', $JSONString, 0);
 
 			$data = json_decode($JSONString);
-			$this->SendDebug('Payload', utf8_decode($data->Payload), 0);
+			$dataPayload = utf8_decode($data->Payload);
+			$this->SendDebug('DataPayload', $dataPayload, 0);
 
-			return "OK von " . $this->InstanceID;
-
-			$data['Payload'] = utf8_decode($data['Payload']);
-			$payload = json_decode($data['Payload'], true);
+			$payload = json_decode($dataPayload);
 
 			$this->SendDebug('Payload', $payload, 0);
 
