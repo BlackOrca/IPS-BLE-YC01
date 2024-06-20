@@ -60,7 +60,7 @@ declare(strict_types=1);
 			$this->SetStatus(102);
 		}
 
-		public function ReceiveData(string $JSONString)
+		public function ReceiveData($JSONString)
 		{		
 			if(empty($this->ReadPropertyString('TasmotaDeviceName')) || empty($this->ReadPropertyString('MAC')))
 			{
