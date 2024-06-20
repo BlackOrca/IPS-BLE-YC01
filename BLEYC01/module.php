@@ -87,6 +87,8 @@ declare(strict_types=1);
 				return "OK not for me!";
 			}
 
+			$this->SendDebug('BLEOperation', $bleOperation->read, 0);
+
 			return "OK von " . $this->InstanceID;
 
 			if(!array_key_exists('BLEOperation', $payload))
