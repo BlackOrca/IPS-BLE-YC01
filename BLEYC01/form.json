@@ -7,7 +7,7 @@
         },
         {
             "type": "ValidationTextBox",
-            "name": "Tasmota MQTT Name",
+            "name": "TasmotaDeviceName",
             "caption": "MQTT-Name of the Tasmota Device"
         },
         {
