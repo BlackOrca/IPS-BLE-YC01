@@ -47,22 +47,28 @@ declare(strict_types=1);
 
 			if (($this->HasActiveParent()) && (IPS_GetKernelRunlevel() == KR_READY)) {
 				$this->RequestData($_IPS['TARGET']);
-			}			
+			}		
+			
+			$this->SetStatus(102);
 		}
 
 		public function ReceiveData($JSONString)
 		{
 			$this->SendDebug('ReceiveData', $JSONString, 0);
-			
+
 			if(empty($this->ReadPropertyString('TasmotaDeviceName')) || empty($this->ReadPropertyString('MAC')))
 			{
 				$this->SendDebug("BLEYC01", "TasmotaDeviceName oder MAC Adresse nicht gesetzt", 0);
 				return;
-			}			
+			}
 
 			// Empfangene Daten vom Gateway/Splitter
 			$data = json_decode($JSONString);
-			$data['Payload'] = utf8_decode($data['Payload']);
+
+			if (IPS_GetKernelDate() > 1670886000) 
+			{
+				$data['Payload'] = utf8_decode($data['Payload']);
+			}
 			
 			$this->SendDebug('Topic', $data['Topic'], 0);
             $this->SendDebug('Payload', $data['Payload'], 0);
