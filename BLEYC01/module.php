@@ -71,10 +71,10 @@ declare(strict_types=1);
 			$this->SendDebug('ReceiveData', $JSONString, 0);
 
 			$data = json_decode($JSONString);
-			$dataPayload = utf8_decode($data->Payload);
-			$this->SendDebug('DataPayload', $dataPayload, 0);
+			//$dataPayload = utf8_decode($data->Payload);
+			$this->SendDebug('DataPayload', $data->Payload, 0);
 
-			$payload = json_decode($dataPayload);
+			$payload = json_decode($data->Payload);
 
 			$this->SendDebug('Payload', var_dump($payload), 0);
 
