@@ -61,16 +61,16 @@ declare(strict_types=1);
 		}
 
 		public function ReceiveData($JSONString)
-		{
-			$this->SendDebug('ReceiveData', $JSONString, 0);
-
+		{		
 			if(empty($this->ReadPropertyString('TasmotaDeviceName')) || empty($this->ReadPropertyString('MAC')))
 			{
 				$this->SendDebug("BLEYC01", "TasmotaDeviceName oder MAC Adresse nicht gesetzt", 0);
 				return;
 			}
 
-			$data = json_decode($JSONString, true);		
+			$this->SendDebug('ReceiveData', $JSONString, 0);
+
+			$data = json_decode($JSONString, true, 512, JSON_THROW_ON_ERROR);		
 
 			if (IPS_GetKernelDate() > 1670886000) 
 			{
