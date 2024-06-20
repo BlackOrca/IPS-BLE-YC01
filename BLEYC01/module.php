@@ -85,12 +85,9 @@ declare(strict_types=1);
 			{
 				$this->SendDebug('BLEOperation', 'No BLEOperation found', 0);
 				return "OK not for me!";
-			}		
-
-			return "OK von " . $this->InstanceID;
+			}
 			
-			$this->SendDebug('BLEOperation', $payload['BLEOperation'], 0);
-			$this->SendDebug('Payload', $payload, 0);
+			$this->SendDebug('BLEYC10Data', $bleOperation['read'], 0);
 
 			return "OK von " . $this->InstanceID;
 		}
