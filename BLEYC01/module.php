@@ -219,8 +219,7 @@ declare(strict_types=1);
 			$data['Payload'] = $payload;
 			$dataJSON = json_encode($data, JSON_UNESCAPED_SLASHES);
 
-			return;
-
+			$this->SendDebug('RequestData', "Send data to Parent...", 0);
 			$this->SendDataToParent($dataJSON);
 		}
 
