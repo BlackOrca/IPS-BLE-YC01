@@ -243,7 +243,7 @@ declare(strict_types=1);
 				return $frame_array;
 		}
 
-		function reverse_bytes(int $bytes) 
+		function reverse_bytes(array $bytes) 
 		{
 			return ($bytes[0] << 8) + $bytes[1];
 		}
