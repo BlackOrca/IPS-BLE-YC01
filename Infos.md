@@ -13,3 +13,11 @@ Der ORP-Wert (Oxidations-Reduktions-Potential) ist ein wichtiger Parameter bei d
 In der Wasseraufbereitung kann der ORP-Wert verwendet werden, um die Effizienz von Desinfektionsprozessen (z. B. Chlorung) zu überwachen. Ein höherer ORP-Wert deutet auf eine bessere Desinfektionswirkung hin. Es ist jedoch wichtig, den ORP-Wert im Kontext anderer Parameter wie pH-Wert und Temperatur zu betrachten, um genaue Schlussfolgerungen zu ziehen.
 
 Der EC-Wert (elektrische Leitfähigkeit) ist ein Maß für die Fähigkeit des Wassers, elektrischen Strom durchzulassen. Er wird oft bei der Wasseranalyse verwendet. Reines Wasser mit geringer Ionenkonzentration hat eine niedrige Leitfähigkeit. Wasser mit hoher Ionenkonzentration, wie gelöste Salze, leitet den Strom besser und hat eine höhere Leitfähigkeit. Der EC-Wert kann verwendet werden, um den Salzgehalt zu berechnen. Idealerweise beträgt der EC-Wert für die Salzbestimmung etwa 0,4 mS. Wenn er davon abweicht, kann destilliertes oder entsalztes Wasser hinzugefügt werden, bis der gewünschte EC-Wert erreicht ist
+
+        auto temp = ((message[13]<<8) + message[14]);
+        auto ph = ((message[3]<<8) + message[4]);
+        auto orp = ((message[9]<<8) + message[10]);
+        auto battery = ((message[15]<<8) + message[16]);
+        auto ec = ((message[5]<<8) + message[6]);
+        auto tds = ((message[7]<<8) + message[8]);
+        auto cloro = ((message[11]<<8) + message[12]);
