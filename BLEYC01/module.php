@@ -89,7 +89,7 @@ declare(strict_types=1);
 				$mac = str_replace(':', '', $mac);
 			}
 			
-			if($bleOperation['MAC'] != $mac)
+			if($payload['BLEOperation']['MAC'] != $mac)
 			{
 				return "OK not for me!";
 			}
@@ -100,7 +100,7 @@ declare(strict_types=1);
 			//FFA1FE5AFEBFFFFFFF57FFFEFF57F799FBE82FFE03FFFEFFFFFFFF5740
 
 			
-			$this->SendDebug('BLEYC10Data', $bleOperation['read'], 0);
+			$this->SendDebug('BLEYC10Data', $payload['BLEOperation']['read'], 0);
 
 			return "OK von " . $this->InstanceID;
 		}
