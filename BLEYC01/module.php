@@ -134,7 +134,7 @@ declare(strict_types=1);
 			{
 				//$this->SendDebug('Payload', 'No DONEREAD found', 0);
 				//$this->RequestData($_IPS['TARGET']);
-				$this->SetValueBoolean(self::Status, true);
+				$this->SetValue(self::Status, true);
 				return;
 			}
 
@@ -180,13 +180,13 @@ declare(strict_types=1);
 			// }
 			//$salt = $ec * 0.55;
 
-			$this->SetValueInteger(self::Battery, $battery);
-			$this->SetValueInteger(self::EC, $ec);
-			$this->SetValueInteger(self::TDS, $tds);
-			$this->SetValueFloat(self::PH, $ph);
-			$this->SetValueFloat(self::ORP, $orp);
-			$this->SetValueFloat(self::Temperature, $temperature);
-			$this->SetValueBoolean(self::Status, false);
+			$this->SetValue(self::Battery, $battery);
+			$this->SetValue(self::EC, $ec);
+			$this->SetValue(self::TDS, $tds);
+			$this->SetValueF(self::PH, $ph);
+			$this->SetValueF(self::ORP, $orp);
+			$this->SetValue(self::Temperature, $temperature);
+			$this->SetValue(self::Status, false);
 
 			$this->SendDebug('ParsePayloadAndApplyData', "Finish.", 0);
 		}		
