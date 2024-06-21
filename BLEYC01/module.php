@@ -29,7 +29,7 @@ declare(strict_types=1);
 			$this->RegisterPropertyInteger("RequestInterval", 30);
 			$this->RegisterTimer('RequestTimer', 0, 'BLEYC01_RequestData($_IPS[\'TARGET\']);');
 			
-			$this->RegisterVariableFloat(self::Battery, $this->Translate(self::Battery), "~Battery.100", 0);
+			$this->RegisterVariableInteger(self::Battery, $this->Translate(self::Battery), "~Battery.100", 0);
 			$this->RegisterVariableInteger(self::EC, "EC", "", 0);
 			$this->RegisterVariableInteger(self::TDS, "TDS", "", 0);
 			$this->RegisterVariableFloat(self::PH, "PH", "~Liquid.pH.F", 0);
