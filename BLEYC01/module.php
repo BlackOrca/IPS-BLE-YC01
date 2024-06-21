@@ -29,12 +29,12 @@ declare(strict_types=1);
 			$this->RegisterPropertyInteger("RequestInterval", 30);
 			$this->RegisterTimer('RequestTimer', 0, 'BLEYC01_RequestData($_IPS[\'TARGET\']);');
 			
-			$this->RegisterVariableInteger(self::Battery, $this->Translate(self::Battery), "~Battery.100", 0);
-			$this->RegisterVariableInteger(self::EC, "EC", "", 0);
-			$this->RegisterVariableInteger(self::TDS, "TDS", "", 0);
-			$this->RegisterVariableFloat(self::PH, "PH", "~Liquid.pH.F", 0);
-			$this->RegisterVariableFloat(self::ORP, "ORP", "~Volt", 0);
-			$this->RegisterVariableFloat(self::Temperature, $this->Translate(self::Temperature), "~Temperature", 0);
+			$this->RegisterVariableInteger(self::Battery, $this->Translate(self::Battery), "~Battery.100", 100);
+			$this->RegisterVariableInteger(self::EC, "EC", "", 40);
+			$this->RegisterVariableInteger(self::TDS, "TDS", "", 50);
+			$this->RegisterVariableFloat(self::PH, "PH", "~Liquid.pH.F", 20);
+			$this->RegisterVariableFloat(self::ORP, "ORP", "~Volt", 60);
+			$this->RegisterVariableFloat(self::Temperature, $this->Translate(self::Temperature), "~Temperature", 10);
 
 			$this->ConnectParent(self::MqttParent);
 		}
@@ -51,10 +51,8 @@ declare(strict_types=1);
 			parent::ApplyChanges();
 
 			$this->ConnectParent(self::MqttParent);
-			$this->SetTimerInterval('RequestTimer', $this->ReadPropertyInteger('RequestInterval') * 1000 * 60);
-
+			
 			$filterResult = preg_quote('"Topic":"' . self::ResponseTopic . '/' . $this->ReadPropertyString('TasmotaDeviceName') . '/' . self::BleResultPostfix);	
-
 			$this->SendDebug('ReceiveDataFilter', '.*' . $filterResult . '.*', 0);
 			$this->SetReceiveDataFilter('.*' . $filterResult . '.*');
 
@@ -62,6 +60,7 @@ declare(strict_types=1);
 				$this->RequestData($_IPS['TARGET']);
 			}		
 			
+			$this->SetTimerInterval('RequestTimer', $this->ReadPropertyInteger('RequestInterval') * 1000 * 60);
 			$this->SetStatus(102);
 		}
 
