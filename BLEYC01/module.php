@@ -12,6 +12,13 @@ declare(strict_types=1);
 		const ResultPostfix = "RESULT";
 		const BleResultPostfix = "BLE";
 
+		const Battery = "Battery";
+		const EC = "EC";
+		const TDS = "TDS";
+		const PH = "PH";
+		const ORP = "ORP";
+		const Temperature = "Temperature";
+
 		public function Create()
 		{
 			//Never delete this line!
@@ -21,6 +28,13 @@ declare(strict_types=1);
 			$this->RegisterPropertyString("MAC", "");
 			$this->RegisterPropertyInteger("RequestInterval", 30);
 			$this->RegisterTimer('RequestTimer', 0, 'BLEYC01_RequestData($_IPS[\'TARGET\']);');
+			
+			$this->RegisterVariableFloat(self::Battery, $this->Translate(self::Battery), "~Battery.100", 0);
+			$this->RegisterVariableInteger(self::EC, "EC", "", 0);
+			$this->RegisterVariableInteger(self::TDS, "TDS", "", 0);
+			$this->RegisterVariableFloat(self::PH, "PH", "~Liquid.pH.F", 0);
+			$this->RegisterVariableFloat(self::ORP, "ORP", "~Volt", 0);
+			$this->RegisterVariableFloat(self::Temperature, $this->Translate(self::Temperature), "~Temperature", 0);
 
 			$this->ConnectParent(self::MqttParent);
 		}
@@ -92,18 +106,71 @@ declare(strict_types=1);
 			if($payload['BLEOperation']['MAC'] != $mac)
 			{
 				return "OK not for me!";
-			}
-
-			
+			}		
 
 			//state: DONEREAD
 			//FFA1FE5AFEBFFFFFFF57FFFEFF57F799FBE82FFE03FFFEFFFFFFFF5740
+			if(!array_key_exists('state', $payload['BLEOperation']))
+			{
+				$this->SendDebug('Payload', 'No state found', 0);
+				return;
+			}
 
-			
-			$this->SendDebug('BLEYC10Data', $payload['BLEOperation']['read'], 0);
+			if($payload['BLEOperation']['state'] != 'DONEREAD')
+			{
+				$this->SendDebug('Payload', 'No DONEREAD found', 0);
+				self::RequestData();
+				return;
+			}
+
+			if(!array_key_exists('read', $payload['BLEOperation']))
+			{
+				$this->SendDebug('Payload', 'No read found', 0);
+				return;
+			}
+
+			self::ParsePayloadAndApplyData($payload['BLEOperation']['read']);
 
 			return "OK von " . $this->InstanceID;
 		}
+
+		public function ParsePayloadAndApplyData($payload)
+		{
+			$this->SendDebug('ParsePayloadAndApplyData', $payload, 0);
+
+			$decodedData = @self::decode($payload);
+
+			if($decodedData === false || $data == null)
+			{
+				$this->SendDebug('Parsing Error', 'Data can´t parsed Successful!', 0);
+				return;
+			}
+
+			$productCode = $decodedData[2];
+			$battery = round(100 * (decode_position($decodedData, 15) - BATT_0) / (BATT_100 - BATT_0));
+			$battery = min(max(0, $battery), 100);
+			$ec = decode_position($decodedData, 5);
+			$tds = decode_position($decodedData, 7);
+			$ph = decode_position($decodedData, 3) / 100.0;
+			$orp = decode_position($decodedData, 9) / 1000.0;
+			$temperature = decode_position($decodedData, 13) / 10.0;
+			//$cloro = decode_position($decodedData, 11);
+			// if ($cloro < 0) {
+			// 	$cloro = 0;
+			// } else {
+			// 	$cloro = $cloro / 10.0;
+			// }
+			//$salt = $ec * 0.55;
+
+			$this->SetValue(self::Battery, $battery);
+			$this->SetValue(self::EC, $ec);
+			$this->SetValue(self::TDS, $tds);
+			$this->SetValue(self::PH, $ph);
+			$this->SetValue(self::ORP, $orp);
+			$this->SetValue(self::Temperature, $temperature);
+
+			$this->SendDebug('ParsePayloadAndApplyData', 'Battery: ' . $battery . ' EC: ' . $ec . ' TDS: ' . $tds . ' PH: ' . $ph . ' ORP: ' . $orp . ' Temperature: ' . $temperature, 0);
+		}		
 
 		public function RequestData()
 		{
@@ -112,6 +179,8 @@ declare(strict_types=1);
 				$this->SendDebug("BLEYC01", "TasmotaDeviceName oder MAC Adresse nicht gesetzt", 0);
 				return;
 			}
+
+			$this->SendDebug('RequestData', 'Send Request to Tasmota', 0);
 
 			$mac = $this->ReadPropertyString('MAC');
 			if(strlen($mac) == 17)
@@ -135,5 +204,34 @@ declare(strict_types=1);
 			$data['Payload'] = $payload;
 			$dataJSON = json_encode($data, JSON_UNESCAPED_SLASHES);
 			$this->SendDataToParent($dataJSON);
+		}
+
+		function decode($byte_frame) : array
+		{
+			$packData = hex2bin($byte_frame);
+			$frame_array = unpack('C*', $packData);
+			$frame_array = array_values($frame_array);
+			$size = count($frame_array);
+
+			for ($i = $size - 1; $i > 0; $i--) {
+				$tmp = $frame_array[$i];
+				$hibit1 = ($tmp & 0x55) << 1;
+				$lobit1 = ($tmp & 0xAA) >> 1;
+				$tmp = $frame_array[$i - 1];
+				$hibit = ($tmp & 0x55) << 1;
+				$lobit = ($tmp & 0xAA) >> 1;
+
+				$frame_array[$i] = 0xFF - ($hibit1 | $lobit);
+				$frame_array[$i - 1] = 0xFF - ($hibit | $lobit1);
+			}
+				return $frame_array;
+		}
+
+		function reverse_bytes($bytes) {
+			return ($bytes[0] << 8) + $bytes[1];
+		}
+		
+		function decode_position($decodedData, $idx) {
+			return reverse_bytes(array_slice($decodedData, $idx, 2));
 		}
 	}

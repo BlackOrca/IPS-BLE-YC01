@@ -5,7 +5,9 @@
             "Support me!": "Wenn Du mir einen ausgeben möchtest.",
             "MAC without colons of the BLE-YC01 for example: 123456789012": "MAC ohne Doppelpunkte des BLE-YC01 z.B.: 123456789012",
             "MQTT-Name of the Tasmota Device": "MQTT-Name des Tasmota Gerätes",
-            "Request interval in minutes": "Abfrageintervall in Minuten"
+            "Request interval in minutes": "Abfrageintervall in Minuten",
+            "Battery": "Batterie",
+            "Temperature": "Temperatur"
         }
     }
 }
