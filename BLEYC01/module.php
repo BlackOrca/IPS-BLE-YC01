@@ -120,7 +120,7 @@ declare(strict_types=1);
 			if($payload['BLEOperation']['state'] != 'DONEREAD')
 			{
 				//$this->SendDebug('Payload', 'No DONEREAD found', 0);
-				$this->RequestData($_IPS['TARGET']);
+				//$this->RequestData($_IPS['TARGET']);
 				return;
 			}
 
