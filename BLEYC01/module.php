@@ -28,8 +28,7 @@ declare(strict_types=1);
 			$this->RegisterPropertyString("MAC", "");
 			$this->RegisterPropertyInteger("RequestInterval", 30);
 			
-			//$this->RegisterTimer('RequestTimer', 0, 'BLEYC01_RequestData($_IPS[\'TARGET\']);');
-			$this->RegisterTimer('RequestTimer', 0, 'BLEYC01_RequestData(' . $this->InstanceID . ');');
+			$this->RegisterTimer('RequestTimer', 0, 'BLEYC_RequestData($_IPS[\'TARGET\']);');
 			
 			$this->RegisterVariableInteger(self::Battery, $this->Translate(self::Battery), "~Battery.100", 100);
 			$this->RegisterVariableInteger(self::EC, "EC", "", 40);
