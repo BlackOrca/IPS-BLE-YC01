@@ -183,8 +183,8 @@ declare(strict_types=1);
 			$this->SetValue(self::Battery, $battery);
 			$this->SetValue(self::EC, $ec);
 			$this->SetValue(self::TDS, $tds);
-			$this->SetValueF(self::PH, $ph);
-			$this->SetValueF(self::ORP, $orp);
+			$this->SetValue(self::PH, $ph);
+			$this->SetValue(self::ORP, $orp);
 			$this->SetValue(self::Temperature, $temperature);
 			$this->SetValue(self::Status, false);
 
