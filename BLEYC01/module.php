@@ -196,9 +196,7 @@ declare(strict_types=1);
 			}
 
 			$this->SendDebug('RequestData', 'Send Request to Tasmota', 0);
-
-			return;
-
+	
 			$mac = $this->ReadPropertyString('MAC');
 			if(strlen($mac) == 17)
 			{
@@ -220,6 +218,9 @@ declare(strict_types=1);
 			$data['Topic'] = $topic;
 			$data['Payload'] = $payload;
 			$dataJSON = json_encode($data, JSON_UNESCAPED_SLASHES);
+
+			return;
+			
 			$this->SendDataToParent($dataJSON);
 		}
 
