@@ -58,7 +58,7 @@ declare(strict_types=1);
 			$this->SetReceiveDataFilter('.*' . $filterResult . '.*');
 
 			if (($this->HasActiveParent()) && (IPS_GetKernelRunlevel() == KR_READY)) {
-				$this->RequestData($_IPS['TARGET']);
+				//$this->RequestData($_IPS['TARGET']);
 			}		
 			
 			$this->SetTimerInterval('RequestTimer', $this->ReadPropertyInteger('RequestInterval') * 1000 * 60);
@@ -94,6 +94,12 @@ declare(strict_types=1);
 			if(!array_key_exists('BLEOperation', $payload))
 			{
 				$this->SendDebug('Payload', 'No BLEOperation found', 0);
+				return;
+			}
+
+			if(!array_key_exists('MAC', $payload['BLEOperation']))
+			{
+				$this->SendDebug('Payload', 'No MAC found', 0);
 				return;
 			}
 
@@ -140,15 +146,15 @@ declare(strict_types=1);
 		{
 			$this->SendDebug('ParsePayloadAndApplyData', $payload, 0);
 
-			$decodedData = @$this->decode($payload);
+			$decodedData = $this->decode($payload);
 
-			if($decodedData === false || $decodedData == null)
+			if($decodedData == null)
 			{
 				$this->SendDebug('Parsing Error', 'Data can´t parsed Successful!', 0);
 				return;
 			}
 
-			$this->SendDebug('ParsePayloadAndApplyData', 'Decoded Data: ' . json_encode($decodedData), 0);
+			$this->SendDebug('ParsePayloadAndApplyData', 'Data Decoded.', 0);
 			return;
 
 			$productCode = $decodedData[2];
@@ -174,7 +180,7 @@ declare(strict_types=1);
 			$this->SetValue(self::ORP, $orp);
 			$this->SetValue(self::Temperature, $temperature);
 
-			$this->SendDebug('ParsePayloadAndApplyData', 'Battery: ' . $battery . ' EC: ' . $ec . ' TDS: ' . $tds . ' PH: ' . $ph . ' ORP: ' . $orp . ' Temperature: ' . $temperature, 0);
+			$this->SendDebug('ParsePayloadAndApplyData', "Finish.", 0);
 		}		
 
 		public function RequestData()
