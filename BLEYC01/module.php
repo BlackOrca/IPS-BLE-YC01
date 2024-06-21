@@ -130,7 +130,8 @@ declare(strict_types=1);
 				return;
 			}
 
-			$this->ParsePayloadAndApplyData($payload['BLEOperation']['read']);
+			$this->SendDebug('Payload', 'Read: ' . $payload['BLEOperation']['read'], 0);
+			//$this->ParsePayloadAndApplyData($payload['BLEOperation']['read']);
 
 			return "OK von " . $this->InstanceID;
 		}
