@@ -18,10 +18,12 @@ declare(strict_types=1);
 		const Battery = "Battery";
 		const EC = "EC";
 		const TDS = "TDS";
+		const Salt_TDS = "Salt_TDS";
 		const PH = "PH";
 		const ORP = "ORP";
 		const Temperature = "Temperature";
 		const Status = "Status";
+		const Chlor = "Chlor";
 
 		public function Create()
 		{
@@ -40,6 +42,8 @@ declare(strict_types=1);
 			$this->RegisterVariableFloat(self::PH, "PH", "~Liquid.pH.F", 20);
 			$this->RegisterVariableFloat(self::ORP, "ORP", "~Volt", 60);
 			$this->RegisterVariableFloat(self::Temperature, $this->Translate(self::Temperature), "~Temperature", 10);
+			$this->RegisterVariableFloat(self::Salt_TDS, "Salt_TDS", "", 55);
+			$this->RegisterVariableFloat(self::Chlor, "Chlor", "", 70);
 			$this->RegisterVariableBoolean(self::Status, self::Status, "~Alert", 0);
 
 			$this->ConnectParent(self::MqttParent);
@@ -169,15 +173,17 @@ declare(strict_types=1);
 			$battery = min(max(0, $battery), 100);
 			$ec = $this->decode_position($decodedData, 5);
 			$tds = $this->decode_position($decodedData, 7);
+			$salt_tds = $this->decode_position($decodedData, 9);
 			$ph = $this->decode_position($decodedData, 3) / 100.0;
-			$orp = $this->decode_position($decodedData, 9) / 1000.0;
+			//$orp = $this->decode_position($decodedData, 9) / 1000.0;
+			$orp = $this->decode_position($decodedData, 20);
 			$temperature = $this->decode_position($decodedData, 13) / 10.0;
-			//$cloro = decode_position($decodedData, 11);
-			// if ($cloro < 0) {
-			// 	$cloro = 0;
-			// } else {
-			// 	$cloro = $cloro / 10.0;
-			// }
+			$cloro = decode_position($decodedData, 11);
+			if ($cloro < 0) {
+				$cloro = 0;
+			} else {
+				$cloro = $cloro / 10.0;
+			}
 			//$salt = $ec * 0.55;
 
 			$this->SetValue(self::Battery, $battery);
@@ -187,6 +193,8 @@ declare(strict_types=1);
 			$this->SetValue(self::ORP, $orp);
 			$this->SetValue(self::Temperature, $temperature);
 			$this->SetValue(self::Status, false);
+			$this->SetValue(self::Salt_TDS, $salt_tds);
+			$this->SetValue(self::Chlor, $cloro);
 
 			$this->SendDebug('ParsePayloadAndApplyData', "Finish.", 0);
 		}		
