@@ -39,16 +39,7 @@ declare(strict_types=1);
 			$this->ConnectParent(self::MqttParent);
 			$this->SetTimerInterval('RequestTimer', $this->ReadPropertyInteger('RequestInterval') * 1000 * 60);
 
-			$filterResult = preg_quote('"Topic":"' . self::ResponseTopic . '/' . $this->ReadPropertyString('TasmotaDeviceName') . '/' . self::BleResultPostfix);
-			//$filterBle = preg_quote('"Topic":"' . self::ResponseTopic . '/' . $this->ReadPropertyString('TasmotaDeviceName') . '/' . self::BleResultPostfix);
-			
-			// $filter1 = preg_quote('"Topic":"' . self::ResponseTopic . '/' . $this->ReadPropertyString('TasmotaDeviceName') . '/' . self::BleResultPostfix . '"');
-			// $filter2 = preg_quote('"Payload":"BLEOperation');
-
-			// $filter = '.*(.*' . $filter1 . ')(.*' . $filter2 . ').*';
-			// $this->SendDebug('ReceiveDataFilter', $filter, 0);
-        	// $this->SetReceiveDataFilter($filter);
-			//"MAC":"C00000036F90"		
+			$filterResult = preg_quote('"Topic":"' . self::ResponseTopic . '/' . $this->ReadPropertyString('TasmotaDeviceName') . '/' . self::BleResultPostfix);	
 
 			$this->SendDebug('ReceiveDataFilter', '.*' . $filterResult . '.*', 0);
 			$this->SetReceiveDataFilter('.*' . $filterResult . '.*');
@@ -70,26 +61,44 @@ declare(strict_types=1);
 
 			$this->SendDebug('ReceiveData', $JSONString, 0);
 
-			$data = json_decode($JSONString);
-			$this->SendDebug('DataPayload', $data->Payload, 0);
-
-			$payload = @json_decode($data->Payload, true);
+			$data = json_decode($JSONString, true);
+			if(!array_key_exists('Payload', $data))
+			{
+				$this->SendDebug('Payload', 'No Payload found', 0);
+				return;
+			}
+	
+			$this->SendDebug('DataPayload', $data['Payload'], 0);
+	
+			$payload = @json_decode($data['Payload'], true);
 			if($payload === false || $payload == null)
 			{
 				$this->SendDebug('Payload', 'No Payload found', 0);
 				return;
 			}
 
-			$bleOperation = @$payload['BLEOperation'];
-			if($bleOperation === false || $bleOperation == null)
+			if(!array_key_exists('BLEOperation', $payload))
+			{
+				$this->SendDebug('Payload', 'No BLEOperation found', 0);
+				return;
+			}
+
+			$mac = $this->ReadPropertyString('MAC');
+			if(strlen($mac) == 17)
+			{
+				$mac = str_replace(':', '', $mac);
+			}
+			
+			if($bleOperation['MAC'] != $mac)
 			{
 				return "OK not for me!";
 			}
 
-			if($bleOperation['MAC'] != $this->ReadPropertyString('MAC'))
-			{
-				return "OK not for me!";
-			}
+			
+
+			//state: DONEREAD
+			//FFA1FE5AFEBFFFFFFF57FFFEFF57F799FBE82FFE03FFFEFFFFFFFF5740
+
 			
 			$this->SendDebug('BLEYC10Data', $bleOperation['read'], 0);
 
@@ -128,23 +137,3 @@ declare(strict_types=1);
 			$this->SendDataToParent($dataJSON);
 		}
 	}
-
-// TX (vom Modul zum Server)
-// {043EA491-0325-4ADD-8FC2-A30C8EEB4D3F}
-// {
-//     "PacketType": 3, // Publish
-//     "QualityOfService": 0,
-//     "Retain": false,
-//     "Topic": "/blub/blubber/switch",
-//     "Payload": "an"
-// }
-
-// RX (vom Server zum Modul)
-// {7F7632D9-FA40-4F38-8DEA-C83CD4325A32}
-// {
-//     "PacketType": 3, // Publish
-//     "QualityOfService": 0,
-//     "Retain": false,
-//     "Topic": "/blub/blubber/switch",
-//     "Payload": "an"
-// }
