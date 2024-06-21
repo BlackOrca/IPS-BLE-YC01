@@ -18,6 +18,7 @@ declare(strict_types=1);
 		const PH = "PH";
 		const ORP = "ORP";
 		const Temperature = "Temperature";
+		const Status = "Status";
 
 		public function Create()
 		{
@@ -36,6 +37,7 @@ declare(strict_types=1);
 			$this->RegisterVariableFloat(self::PH, "PH", "~Liquid.pH.F", 20);
 			$this->RegisterVariableFloat(self::ORP, "ORP", "~Volt", 60);
 			$this->RegisterVariableFloat(self::Temperature, $this->Translate(self::Temperature), "~Temperature", 10);
+			$this->RegisterVariableBoolean(self::Status, self::Status, "~Alert", 0);
 
 			$this->ConnectParent(self::MqttParent);
 		}
@@ -129,6 +131,7 @@ declare(strict_types=1);
 			{
 				//$this->SendDebug('Payload', 'No DONEREAD found', 0);
 				//$this->RequestData($_IPS['TARGET']);
+				$this->SetValueBoolean(self::Status, true);
 				return;
 			}
 
@@ -174,14 +177,13 @@ declare(strict_types=1);
 			// }
 			//$salt = $ec * 0.55;
 
-			return;
-
 			$this->SetValueInteger(self::Battery, $battery);
 			$this->SetValueInteger(self::EC, $ec);
 			$this->SetValueInteger(self::TDS, $tds);
 			$this->SetValueFloat(self::PH, $ph);
 			$this->SetValueFloat(self::ORP, $orp);
 			$this->SetValueFloat(self::Temperature, $temperature);
+			$this->SetValueBoolean(self::Status, false);
 
 			$this->SendDebug('ParsePayloadAndApplyData', "Finish.", 0);
 		}		
