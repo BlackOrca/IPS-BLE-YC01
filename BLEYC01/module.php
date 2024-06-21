@@ -134,7 +134,7 @@ declare(strict_types=1);
 			return "OK von " . $this->InstanceID;
 		}
 
-		public function ParsePayloadAndApplyData($payload)
+		public function ParsePayloadAndApplyData(string $payload)
 		{
 			$this->SendDebug('ParsePayloadAndApplyData', $payload, 0);
 
@@ -206,7 +206,7 @@ declare(strict_types=1);
 			$this->SendDataToParent($dataJSON);
 		}
 
-		function decode($byte_frame) : array
+		function decode(string $byte_frame) : array
 		{
 			$packData = hex2bin($byte_frame);
 			$frame_array = unpack('C*', $packData);
@@ -227,11 +227,13 @@ declare(strict_types=1);
 				return $frame_array;
 		}
 
-		function reverse_bytes($bytes) {
+		function reverse_bytes(int $bytes) 
+		{
 			return ($bytes[0] << 8) + $bytes[1];
 		}
 		
-		function decode_position($decodedData, $idx) {
+		function decode_position(array $decodedData, int $idx) 
+		{
 			return reverse_bytes(array_slice($decodedData, $idx, 2));
 		}
 	}
