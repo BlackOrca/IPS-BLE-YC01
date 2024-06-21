@@ -116,10 +116,11 @@ declare(strict_types=1);
 				return;
 			}
 
+			$this->SendDebug('Payload', 'State: ' . $payload['BLEOperation']['state'], 0);
 			if($payload['BLEOperation']['state'] != 'DONEREAD')
 			{
-				$this->SendDebug('Payload', 'No DONEREAD found', 0);
-				//self::RequestData();
+				//$this->SendDebug('Payload', 'No DONEREAD found', 0);
+				$this->RequestData($_IPS['TARGET']);
 				return;
 			}
 
@@ -129,7 +130,7 @@ declare(strict_types=1);
 				return;
 			}
 
-			//self::ParsePayloadAndApplyData($payload['BLEOperation']['read']);
+			$this->ParsePayloadAndApplyData($payload['BLEOperation']['read']);
 
 			return "OK von " . $this->InstanceID;
 		}
@@ -138,22 +139,25 @@ declare(strict_types=1);
 		{
 			$this->SendDebug('ParsePayloadAndApplyData', $payload, 0);
 
-			$decodedData = @self::decode($payload);
+			$decodedData = @$this->decode($payload);
 
-			if($decodedData === false || $data == null)
+			if($decodedData === false || $decodedData == null)
 			{
 				$this->SendDebug('Parsing Error', 'Data can´t parsed Successful!', 0);
 				return;
 			}
 
+			$this->SendDebug('ParsePayloadAndApplyData', 'Decoded Data: ' . json_encode($decodedData), 0);
+			return;
+
 			$productCode = $decodedData[2];
-			$battery = round(100 * (decode_position($decodedData, 15) - BATT_0) / (BATT_100 - BATT_0));
+			$battery = round(100 * ($this->decode_position($decodedData, 15) - BATT_0) / (BATT_100 - BATT_0));
 			$battery = min(max(0, $battery), 100);
-			$ec = decode_position($decodedData, 5);
-			$tds = decode_position($decodedData, 7);
-			$ph = decode_position($decodedData, 3) / 100.0;
-			$orp = decode_position($decodedData, 9) / 1000.0;
-			$temperature = decode_position($decodedData, 13) / 10.0;
+			$ec = $this->decode_position($decodedData, 5);
+			$tds = $this->decode_position($decodedData, 7);
+			$ph = $this->decode_position($decodedData, 3) / 100.0;
+			$orp = $this->decode_position($decodedData, 9) / 1000.0;
+			$temperature = $this->decode_position($decodedData, 13) / 10.0;
 			//$cloro = decode_position($decodedData, 11);
 			// if ($cloro < 0) {
 			// 	$cloro = 0;
