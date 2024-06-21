@@ -27,6 +27,7 @@ declare(strict_types=1);
 			$this->RegisterPropertyString("TasmotaDeviceName", "");
 			$this->RegisterPropertyString("MAC", "");
 			$this->RegisterPropertyInteger("RequestInterval", 30);
+			
 			$this->RegisterTimer('RequestTimer', 0, 'BLEYC01_RequestData($_IPS[\'TARGET\']);');
 			
 			$this->RegisterVariableInteger(self::Battery, $this->Translate(self::Battery), "~Battery.100", 100);
@@ -66,6 +67,8 @@ declare(strict_types=1);
 
 		public function ReceiveData($JSONString)
 		{		
+			return;
+			
 			if(empty($this->ReadPropertyString('TasmotaDeviceName')) || empty($this->ReadPropertyString('MAC')))
 			{
 				$this->SendDebug("BLEYC01", "TasmotaDeviceName oder MAC Adresse nicht gesetzt", 0);
