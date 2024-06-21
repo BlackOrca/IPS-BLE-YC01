@@ -250,6 +250,6 @@ declare(strict_types=1);
 		
 		function decode_position(array $decodedData, int $idx) 
 		{
-			return reverse_bytes(array_slice($decodedData, $idx, 2));
+			return $this->reverse_bytes(array_slice($decodedData, $idx, 2));
 		}
 	}
