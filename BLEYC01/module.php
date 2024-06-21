@@ -58,10 +58,12 @@ declare(strict_types=1);
 			$this->SetReceiveDataFilter('.*' . $filterResult . '.*');
 
 			if (($this->HasActiveParent()) && (IPS_GetKernelRunlevel() == KR_READY)) {
-				//$this->RequestData($_IPS['TARGET']);
+				$this->RequestData($_IPS['TARGET']);
 			}		
 			
-			$this->SetTimerInterval('RequestTimer', $this->ReadPropertyInteger('RequestInterval') * 1000 * 60);
+			$interval = $this->ReadPropertyInteger('RequestInterval') * 1000 * 60;
+			$this->SetTimerInterval('RequestTimer', $interval);
+			$this->SendDebug('RequestTimer', 'Interval: ' . $interval . ' ms', 0);
 			$this->SetStatus(102);
 		}
 
@@ -74,6 +76,8 @@ declare(strict_types=1);
 			}
 
 			$this->SendDebug('ReceiveData', $JSONString, 0);
+
+			return;
 
 			$data = json_decode($JSONString, true);
 			if(!array_key_exists('Payload', $data))
@@ -192,6 +196,8 @@ declare(strict_types=1);
 			}
 
 			$this->SendDebug('RequestData', 'Send Request to Tasmota', 0);
+
+			return;
 
 			$mac = $this->ReadPropertyString('MAC');
 			if(strlen($mac) == 17)
