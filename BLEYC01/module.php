@@ -156,8 +156,7 @@ declare(strict_types=1);
 				return;
 			}
 
-			$this->SendDebug('ParsePayloadAndApplyData', 'Data Decoded.', 0);
-			return;
+			$this->SendDebug('ParsePayloadAndApplyData', 'Data Decoded.', 0);			
 
 			$productCode = $decodedData[2];
 			$battery = round(100 * ($this->decode_position($decodedData, 15) - BATT_0) / (BATT_100 - BATT_0));
@@ -175,12 +174,14 @@ declare(strict_types=1);
 			// }
 			//$salt = $ec * 0.55;
 
-			$this->SetValue(self::Battery, $battery);
-			$this->SetValue(self::EC, $ec);
-			$this->SetValue(self::TDS, $tds);
-			$this->SetValue(self::PH, $ph);
-			$this->SetValue(self::ORP, $orp);
-			$this->SetValue(self::Temperature, $temperature);
+			return;
+
+			$this->SetValueInteger(self::Battery, $battery);
+			$this->SetValueInteger(self::EC, $ec);
+			$this->SetValueInteger(self::TDS, $tds);
+			$this->SetValueFloat(self::PH, $ph);
+			$this->SetValueFloat(self::ORP, $orp);
+			$this->SetValueFloat(self::Temperature, $temperature);
 
 			$this->SendDebug('ParsePayloadAndApplyData', "Finish.", 0);
 		}		
