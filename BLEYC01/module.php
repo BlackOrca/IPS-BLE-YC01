@@ -12,12 +12,16 @@ declare(strict_types=1);
 		const ResultPostfix = "RESULT";
 		const BleResultPostfix = "BLE";
 
+		const BATT_0 = 1950;
+		const BATT_100 = 3190;
+
 		const Battery = "Battery";
 		const EC = "EC";
 		const TDS = "TDS";
 		const PH = "PH";
 		const ORP = "ORP";
 		const Temperature = "Temperature";
+		const Status = "Status";
 
 		public function Create()
 		{
@@ -36,6 +40,7 @@ declare(strict_types=1);
 			$this->RegisterVariableFloat(self::PH, "PH", "~Liquid.pH.F", 20);
 			$this->RegisterVariableFloat(self::ORP, "ORP", "~Volt", 60);
 			$this->RegisterVariableFloat(self::Temperature, $this->Translate(self::Temperature), "~Temperature", 10);
+			$this->RegisterVariableBoolean(self::Status, self::Status, "~Alert", 0);
 
 			$this->ConnectParent(self::MqttParent);
 		}
@@ -129,6 +134,7 @@ declare(strict_types=1);
 			{
 				//$this->SendDebug('Payload', 'No DONEREAD found', 0);
 				//$this->RequestData($_IPS['TARGET']);
+				$this->SetValueBoolean(self::Status, true);
 				return;
 			}
 
@@ -159,7 +165,7 @@ declare(strict_types=1);
 			$this->SendDebug('ParsePayloadAndApplyData', 'Data Decoded.', 0);			
 
 			$productCode = $decodedData[2];
-			$battery = round(100 * ($this->decode_position($decodedData, 15) - BATT_0) / (BATT_100 - BATT_0));
+			$battery = round(100 * ($this->decode_position($decodedData, 15) - self::BATT_0) / (self::BATT_100 - self::BATT_0));
 			$battery = min(max(0, $battery), 100);
 			$ec = $this->decode_position($decodedData, 5);
 			$tds = $this->decode_position($decodedData, 7);
@@ -174,14 +180,13 @@ declare(strict_types=1);
 			// }
 			//$salt = $ec * 0.55;
 
-			return;
-
 			$this->SetValueInteger(self::Battery, $battery);
 			$this->SetValueInteger(self::EC, $ec);
 			$this->SetValueInteger(self::TDS, $tds);
 			$this->SetValueFloat(self::PH, $ph);
 			$this->SetValueFloat(self::ORP, $orp);
 			$this->SetValueFloat(self::Temperature, $temperature);
+			$this->SetValueBoolean(self::Status, false);
 
 			$this->SendDebug('ParsePayloadAndApplyData', "Finish.", 0);
 		}		
