@@ -77,8 +77,6 @@ declare(strict_types=1);
 
 			$this->SendDebug('ReceiveData', $JSONString, 0);
 
-			return;
-
 			$data = json_decode($JSONString, true);
 			if(!array_key_exists('Payload', $data))
 			{
@@ -88,8 +86,8 @@ declare(strict_types=1);
 	
 			$this->SendDebug('DataPayload', $data['Payload'], 0);
 	
-			$payload = @json_decode($data['Payload'], true);
-			if($payload === false || $payload == null)
+			$payload = json_decode($data['Payload'], true);
+			if($payload == null)
 			{
 				$this->SendDebug('Payload', 'No Payload found', 0);
 				return;
