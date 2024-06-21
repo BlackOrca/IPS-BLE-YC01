@@ -67,8 +67,6 @@ declare(strict_types=1);
 
 		public function ReceiveData($JSONString)
 		{		
-			return;
-			
 			if(empty($this->ReadPropertyString('TasmotaDeviceName')) || empty($this->ReadPropertyString('MAC')))
 			{
 				$this->SendDebug("BLEYC01", "TasmotaDeviceName oder MAC Adresse nicht gesetzt", 0);
@@ -131,7 +129,7 @@ declare(strict_types=1);
 				return;
 			}
 
-			self::ParsePayloadAndApplyData($payload['BLEOperation']['read']);
+			//self::ParsePayloadAndApplyData($payload['BLEOperation']['read']);
 
 			return "OK von " . $this->InstanceID;
 		}
