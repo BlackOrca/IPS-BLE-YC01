@@ -178,7 +178,7 @@ declare(strict_types=1);
 			//$orp = $this->decode_position($decodedData, 9) / 1000.0;
 			$orp = $this->decode_position($decodedData, 20);
 			$temperature = $this->decode_position($decodedData, 13) / 10.0;
-			$cloro = decode_position($decodedData, 11);
+			$cloro = $this->decode_position($decodedData, 11);
 			if ($cloro < 0) {
 				$cloro = 0;
 			} else {
