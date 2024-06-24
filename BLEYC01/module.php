@@ -98,7 +98,7 @@ declare(strict_types=1);
 			{
 				$this->SetStatus(104);
 				$this->SetValue(self::Status, false);
-				return
+				return;
 			}
 			
 			$this->ConnectParent(self::MqttParent);
