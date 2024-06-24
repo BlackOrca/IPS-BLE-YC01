@@ -70,12 +70,12 @@ declare(strict_types=1);
 				IPS_SetVariableProfileDigits('BLEYC01.Chlorine', 1);
 			}
 
-			
+
 			$this->RegisterVariableInteger(self::Battery, $this->Translate(self::Battery), "~Battery.100", 100);
 			$this->RegisterVariableInteger(self::EC, "EC", "BLEYC01.EC", 40);
 			$this->RegisterVariableInteger(self::TDS, "TDS", "BLEYC01.TDS", 50);
 			$this->RegisterVariableFloat(self::PH, "PH", "~Liquid.pH.F", 20);
-			$this->RegisterVariableFloat(self::ORP, "ORP", "'BLEYC01.ORP", 60);
+			$this->RegisterVariableFloat(self::ORP, "ORP", "BLEYC01.ORP", 60);
 			$this->RegisterVariableFloat(self::Temperature, $this->Translate(self::Temperature), "~Temperature", 10);
 			$this->RegisterVariableFloat(self::Chlorine, $this->Translate(self::Chlorine), "BLEYC01.Chlorine", 70);
 			$this->RegisterVariableBoolean(self::Status, self::Status, "~Alert", 0);
