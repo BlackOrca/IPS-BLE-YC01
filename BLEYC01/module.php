@@ -70,6 +70,7 @@ declare(strict_types=1);
 				IPS_SetVariableProfileDigits('BLEYC01.Chlorine', 1);
 			}
 
+			
 			$this->RegisterVariableInteger(self::Battery, $this->Translate(self::Battery), "~Battery.100", 100);
 			$this->RegisterVariableInteger(self::EC, "EC", "BLEYC01.EC", 40);
 			$this->RegisterVariableInteger(self::TDS, "TDS", "BLEYC01.TDS", 50);
