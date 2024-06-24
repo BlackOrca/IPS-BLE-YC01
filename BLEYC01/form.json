@@ -1,5 +1,11 @@
 {
     "elements": [
+        { 
+            "type": "CheckBox", 
+            "name": "Active", 
+            "caption": "Module Active",
+            "value": true
+        },
         {
             "type": "ValidationTextBox",
             "name": "MAC",

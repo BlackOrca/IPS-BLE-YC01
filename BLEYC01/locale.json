@@ -9,7 +9,8 @@
             "Battery": "Batterie",
             "Temperature": "Temperatur",
             "Active": "Aktiv",
-            "Chlorine": "Chlor"
+            "Chlorine": "Chlor",
+            "Module Active": "Modul Aktiv"
         }
     }
 }
