@@ -47,7 +47,7 @@ declare(strict_types=1);
 			}
 			if(!IPS_VariableProfileExists('BLEYC01.EC'))
 			{
-				IPS_CreateVariableProfile('BLEYC01.EC', 2);
+				IPS_CreateVariableProfile('BLEYC01.EC', 1);
 				IPS_SetVariableProfileIcon('BLEYC01.EC', '');
 				IPS_SetVariableProfileText('BLEYC01.EC', '', ' µS/cm');
 				IPS_SetVariableProfileValues('BLEYC01.EC', 0, 2000, 1);
@@ -55,7 +55,7 @@ declare(strict_types=1);
 			}
 			if(!IPS_VariableProfileExists('BLEYC01.TDS'))
 			{
-				IPS_CreateVariableProfile('BLEYC01.TDS', 2);
+				IPS_CreateVariableProfile('BLEYC01.TDS', 1);
 				IPS_SetVariableProfileIcon('BLEYC01.TDS', 'Snow');
 				IPS_SetVariableProfileText('BLEYC01.TDS', '', ' ppm');
 				IPS_SetVariableProfileValues('BLEYC01.TDS', 0, 2000, 1);
