@@ -244,6 +244,7 @@ declare(strict_types=1);
 			$this->SetValue(self::Temperature, $temperature);
 			$this->SetValue(self::Status, false);
 			$this->SetValue(self::Chlorine, $cloro);
+			$this->SetValue(self::Active, true);
 
 			$this->SendDebug('ParsePayloadAndApplyData', "Finish.", 0);
 		}		
