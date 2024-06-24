@@ -22,7 +22,8 @@ declare(strict_types=1);
 		const ORP = "ORP";
 		const Temperature = "Temperature";
 		const Status = "Status";
-		const Chlor = "Chlor";
+		const Chlorine = "Chlorine";
+		const Active = "Active";
 
 		public function Create()
 		{
@@ -32,17 +33,52 @@ declare(strict_types=1);
 			$this->RegisterPropertyString("TasmotaDeviceName", "");
 			$this->RegisterPropertyString("MAC", "");
 			$this->RegisterPropertyInteger("RequestInterval", 30);
+			$this->RegisterPropertyBoolean("Active", true);
 			
 			$this->RegisterTimer('RequestTimer', 0, 'BLEYC_RequestData($_IPS[\'TARGET\']);');
 			
+			if(!IPS_VariableProfileExists('BLEYC01.ORP'))
+			{
+				IPS_CreateVariableProfile('BLEYC01.ORP', 2);
+				IPS_SetVariableProfileIcon('BLEYC01.ORP', 'Electricity');
+				IPS_SetVariableProfileText('BLEYC01.ORP', '', ' mV');
+				IPS_SetVariableProfileValues('BLEYC01.ORP', -1000, 1000, 1);
+				IPS_SetVariableProfileDigits('BLEYC01.ORP', 0);
+			}
+			if(!IPS_VariableProfileExists('BLEYC01.EC'))
+			{
+				IPS_CreateVariableProfile('BLEYC01.EC', 2);
+				IPS_SetVariableProfileIcon('BLEYC01.EC', '');
+				IPS_SetVariableProfileText('BLEYC01.EC', '', ' µS/cm');
+				IPS_SetVariableProfileValues('BLEYC01.EC', 0, 2000, 1);
+				IPS_SetVariableProfileDigits('BLEYC01.EC', 0);
+			}
+			if(!IPS_VariableProfileExists('BLEYC01.TDS'))
+			{
+				IPS_CreateVariableProfile('BLEYC01.TDS', 2);
+				IPS_SetVariableProfileIcon('BLEYC01.TDS', 'Snow');
+				IPS_SetVariableProfileText('BLEYC01.TDS', '', ' ppm');
+				IPS_SetVariableProfileValues('BLEYC01.TDS', 0, 2000, 1);
+				IPS_SetVariableProfileDigits('BLEYC01.TDS', 0);
+			}
+			if(!IPS_VariableProfileExists('BLEYC01.Chlorine'))
+			{
+				IPS_CreateVariableProfile('BLEYC01.Chlorine', 2);
+				IPS_SetVariableProfileIcon('BLEYC01.Chlorine', 'ErlenmeyerFlask');
+				IPS_SetVariableProfileText('BLEYC01.Chlorine', '', ' mg/l');
+				IPS_SetVariableProfileValues('BLEYC01.Chlorine', 0, 10, 0.1);
+				IPS_SetVariableProfileDigits('BLEYC01.Chlorine', 1);
+			}
+
 			$this->RegisterVariableInteger(self::Battery, $this->Translate(self::Battery), "~Battery.100", 100);
-			$this->RegisterVariableInteger(self::EC, "EC", "", 40);
-			$this->RegisterVariableInteger(self::TDS, "TDS", "", 50);
+			$this->RegisterVariableInteger(self::EC, "EC", "BLEYC01.EC", 40);
+			$this->RegisterVariableInteger(self::TDS, "TDS", "BLEYC01.TDS", 50);
 			$this->RegisterVariableFloat(self::PH, "PH", "~Liquid.pH.F", 20);
-			$this->RegisterVariableFloat(self::ORP, "ORP", "", 60);
+			$this->RegisterVariableFloat(self::ORP, "ORP", "'BLEYC01.ORP", 60);
 			$this->RegisterVariableFloat(self::Temperature, $this->Translate(self::Temperature), "~Temperature", 10);
-			$this->RegisterVariableFloat(self::Chlor, "Chlor", "", 70);
+			$this->RegisterVariableFloat(self::Chlorine, $this->Translate(self::Chlorine), "BLEYC01.Chlorine", 70);
 			$this->RegisterVariableBoolean(self::Status, self::Status, "~Alert", 0);
+			$this->RegisterVariableBoolean(self::Active, $this->Translate(self::Active), "~Switch", 0);
 
 			$this->ConnectParent(self::MqttParent);
 		}
@@ -58,6 +94,13 @@ declare(strict_types=1);
 			//Never delete this line!
 			parent::ApplyChanges();
 
+			if($this->ReadPropertyBoolean('Active') == false)
+			{
+				$this->SetStatus(104);
+				$this->SetValue(self::Status, false);
+				return
+			}
+			
 			$this->ConnectParent(self::MqttParent);
 			
 			$filterResult = preg_quote('"Topic":"' . self::ResponseTopic . '/' . $this->ReadPropertyString('TasmotaDeviceName') . '/' . self::BleResultPostfix);	
@@ -71,6 +114,8 @@ declare(strict_types=1);
 			$interval = $this->ReadPropertyInteger('RequestInterval') * 1000 * 60;
 			$this->SetTimerInterval('RequestTimer', $interval);
 			$this->SendDebug('RequestTimer', 'Interval: ' . $interval . ' ms', 0);
+
+			$this->SetValue(self::Status, true);
 			$this->SetStatus(102);
 		}
 
@@ -172,15 +217,20 @@ declare(strict_types=1);
 			$ec = $this->decode_position($decodedData, 5);
 			$tds = $this->decode_position($decodedData, 7);
 			$ph = $this->decode_position($decodedData, 3) / 100.0;
-			$orp = $this->decode_position($decodedData, 9) / 1000.0;
+			$orp = $this->decode_position($decodedData, 9);
 			//$orp = $this->decode_position($decodedData, 20);
 			$temperature = $this->decode_position($decodedData, 13) / 10.0;
-			$cloro = $this->decode_position($decodedData, 11);
+
+			$cloro = $this->decode_position($decodedData, 11);			
 			if ($cloro < 0) 
 			{
 				$cloro = 0;
 			} 
-			else 
+			else if($cloro > 6000)
+			{
+				$cloro = 0;
+			} 
+			else
 			{
 				$cloro = $cloro / 10.0;
 			}
@@ -192,7 +242,7 @@ declare(strict_types=1);
 			$this->SetValue(self::ORP, $orp);
 			$this->SetValue(self::Temperature, $temperature);
 			$this->SetValue(self::Status, false);
-			$this->SetValue(self::Chlor, $cloro);
+			$this->SetValue(self::Chlorine, $cloro);
 
 			$this->SendDebug('ParsePayloadAndApplyData', "Finish.", 0);
 		}		
