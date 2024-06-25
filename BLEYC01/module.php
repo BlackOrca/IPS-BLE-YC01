@@ -98,7 +98,7 @@ declare(strict_types=1);
 			if($this->ReadPropertyBoolean('Active') == false)
 			{
 				$this->SetStatus(104);
-				$this->SetValue(self::Status, false);
+				$this->RequestData($_IPS['TARGET']);			
 				return;
 			}
 			
@@ -116,7 +116,6 @@ declare(strict_types=1);
 			$this->SetTimerInterval('RequestTimer', $interval);
 			$this->SendDebug('RequestTimer', 'Interval: ' . $interval . ' ms', 0);
 
-			$this->SetValue(self::Status, true);
 			$this->SetStatus(102);
 		}
 
@@ -252,6 +251,14 @@ declare(strict_types=1);
 
 		public function RequestData()
 		{
+			if(!$this->ReadPropertyBoolean('Active'))
+			{
+				$this->SetValue(self::Status, false);
+				$this->SendDebug('RequestData', 'Instance is inactive', 0);
+				return;
+			}
+
+			$this->SetValue(self::Status, true);
 			if(empty($this->ReadPropertyString('TasmotaDeviceName')) || empty($this->ReadPropertyString('MAC')))
 			{
 				$this->SendDebug("BLEYC01", "TasmotaDeviceName oder MAC Adresse nicht gesetzt", 0);
