@@ -95,7 +95,7 @@ declare(strict_types=1);
 			//Never delete this line!
 			parent::ApplyChanges();
 
-			if($this->ReadPropertyBoolean('Active') == false)
+			if(!$this->ReadPropertyBoolean('Active'))
 			{
 				$this->SetStatus(104);
 				$this->RequestData($_IPS['TARGET']);			
@@ -108,7 +108,7 @@ declare(strict_types=1);
 			$this->SendDebug('ReceiveDataFilter', '.*' . $filterResult . '.*', 0);
 			$this->SetReceiveDataFilter('.*' . $filterResult . '.*');
 
-			if (($this->HasActiveParent()) && (IPS_GetKernelRunlevel() == KR_READY)) {
+			if ($this->HasActiveParent() && IPS_GetKernelRunlevel() == KR_READY) {
 				$this->RequestData($_IPS['TARGET']);
 			}		
 			
@@ -124,9 +124,11 @@ declare(strict_types=1);
 			if(empty($this->ReadPropertyString('TasmotaDeviceName')) || empty($this->ReadPropertyString('MAC')))
 			{
 				$this->SendDebug("BLEYC01", "TasmotaDeviceName oder MAC Adresse nicht gesetzt", 0);
+				$this->SetValue(self::Active, false);
 				return;
 			}
 
+			$this->SetValue(self::Active, true);
 			$this->SendDebug('ReceiveData', $JSONString, 0);
 
 			$data = json_decode($JSONString, true);
@@ -179,8 +181,7 @@ declare(strict_types=1);
 			$this->SendDebug('Payload', 'State: ' . $payload['BLEOperation']['state'], 0);
 			if($payload['BLEOperation']['state'] != 'DONEREAD')
 			{
-				//$this->SendDebug('Payload', 'No DONEREAD found', 0);
-				//$this->RequestData($_IPS['TARGET']);
+				$this->SendDebug('Payload', 'No DONEREAD found', 0);
 				$this->SetValue(self::Status, true);
 				return;
 			}
@@ -253,12 +254,12 @@ declare(strict_types=1);
 		{
 			if(!$this->ReadPropertyBoolean('Active'))
 			{
-				$this->SetValue(self::Status, false);
+				$this->SetValue(self::Active, false);
 				$this->SendDebug('RequestData', 'Instance is inactive', 0);
 				return;
 			}
 
-			$this->SetValue(self::Status, true);
+			$this->SetValue(self::Active, true);
 			if(empty($this->ReadPropertyString('TasmotaDeviceName')) || empty($this->ReadPropertyString('MAC')))
 			{
 				$this->SendDebug("BLEYC01", "TasmotaDeviceName oder MAC Adresse nicht gesetzt", 0);
