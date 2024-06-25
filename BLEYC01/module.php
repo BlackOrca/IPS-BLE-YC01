@@ -100,10 +100,11 @@ declare(strict_types=1);
 			if(!$this->ReadPropertyBoolean('Active'))
 			{
 				$this->SetStatus(104);
-				$this->RequestData($_IPS['TARGET']);			
+				$this->SetValue(self::Active, false);			
 				return;
 			}
 			
+			$this->SetValue(self::Active, true);	
 			$this->ConnectParent(self::MqttParent);
 			
 			$filterResult = preg_quote('"Topic":"' . self::ResponseTopic . '/' . $this->ReadPropertyString('TasmotaDeviceName') . '/' . self::BleResultPostfix);	
@@ -130,7 +131,6 @@ declare(strict_types=1);
 				return;
 			}
 
-			$this->SetValue(self::Active, true);
 			$this->SendDebug('ReceiveData', $JSONString, 0);
 
 			$data = json_decode($JSONString, true);
@@ -247,7 +247,6 @@ declare(strict_types=1);
 			$this->SetValue(self::Temperature, $temperature);
 			$this->SetValue(self::Status, false);
 			$this->SetValue(self::Chlorine, $cloro);
-			$this->SetValue(self::Active, true);
 
 			$this->SendDebug('ParsePayloadAndApplyData', "Finish.", 0);
 		}		
@@ -256,12 +255,10 @@ declare(strict_types=1);
 		{
 			if(!$this->ReadPropertyBoolean('Active'))
 			{
-				$this->SetValue(self::Active, false);
 				$this->SendDebug('RequestData', 'Instance is inactive', 0);
 				return;
 			}
 
-			$this->SetValue(self::Active, true);
 			if(empty($this->ReadPropertyString('TasmotaDeviceName')) || empty($this->ReadPropertyString('MAC')))
 			{
 				$this->SendDebug("BLEYC01", "TasmotaDeviceName oder MAC Adresse nicht gesetzt", 0);
