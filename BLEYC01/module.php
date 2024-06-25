@@ -12,8 +12,10 @@ declare(strict_types=1);
 		const ResultPostfix = "RESULT";
 		const BleResultPostfix = "BLE";
 
-		const BATT_0 = 1950;
-		const BATT_100 = 3190;
+		// const BATT_0 = 1950;
+		const BATT_0 = 1700;
+		//const BATT_100 = 3190;
+		const BATT_100 = 3090;
 
 		const Battery = "Battery";
 		const EC = "EC";
@@ -213,9 +215,9 @@ declare(strict_types=1);
 			$this->SendDebug('ParsePayloadAndApplyData', 'Data Decoded.', 0);			
 
 			$productCode = $decodedData[2];
-			$battery = $this->decode_position($decodedData, 15)/45;
-			// $battery = round(100 * ($this->decode_position($decodedData, 15) - self::BATT_0) / (self::BATT_100 - self::BATT_0));
-			// $battery = min(max(0, $battery), 100);
+			//$battery = $this->decode_position($decodedData, 15)/45;
+			$battery = round(100 * ($this->decode_position($decodedData, 15) - self::BATT_0) / (self::BATT_100 - self::BATT_0));
+			$battery = min(max(0, $battery), 100);
 			$ec = $this->decode_position($decodedData, 5);
 			$tds = $this->decode_position($decodedData, 7);
 			$ph = $this->decode_position($decodedData, 3) / 100.0;
