@@ -10,7 +10,8 @@
             "Temperature": "Temperatur",
             "Active": "Aktiv",
             "Chlorine": "Chlor",
-            "Module Active": "Modul Aktiv"
+            "Module Active": "Modul Aktiv",
+            "BLEYC10": "BLEYC01"
         }
     }
 }
