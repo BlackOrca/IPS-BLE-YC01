@@ -213,8 +213,9 @@ declare(strict_types=1);
 			$this->SendDebug('ParsePayloadAndApplyData', 'Data Decoded.', 0);			
 
 			$productCode = $decodedData[2];
-			$battery = round(100 * ($this->decode_position($decodedData, 15) - self::BATT_0) / (self::BATT_100 - self::BATT_0));
-			$battery = min(max(0, $battery), 100);
+			$battery = $this->decode_position($decodedData, 15)/45;
+			// $battery = round(100 * ($this->decode_position($decodedData, 15) - self::BATT_0) / (self::BATT_100 - self::BATT_0));
+			// $battery = min(max(0, $battery), 100);
 			$ec = $this->decode_position($decodedData, 5);
 			$tds = $this->decode_position($decodedData, 7);
 			$ph = $this->decode_position($decodedData, 3) / 100.0;
