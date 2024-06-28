@@ -12,6 +12,10 @@ declare(strict_types=1);
 		const ResultPostfix = "RESULT";
 		const BleResultPostfix = "BLE";
 
+		const RedValue = 0xF44336;
+		const YellowValue = 0xF68B38;
+		const GreenValue = 0x189B49;
+
 		// const BATT_0 = 1950;
 		const BATT_0 = 1700;
 		//const BATT_100 = 3190;
@@ -26,6 +30,7 @@ declare(strict_types=1);
 		const Status = "Status";
 		const Chlorine = "Chlorine";
 		const Active = "Active";
+		const DataTimestamp = "DataTimestamp";
 
 		public function Create()
 		{
@@ -39,49 +44,18 @@ declare(strict_types=1);
 			
 			$this->RegisterTimer('RequestTimer', 0, 'BLEYC_RequestData($_IPS[\'TARGET\']);');
 			
-			if(!IPS_VariableProfileExists('BLEYC01.ORP'))
-			{
-				IPS_CreateVariableProfile('BLEYC01.ORP', 2);
-				IPS_SetVariableProfileIcon('BLEYC01.ORP', 'Electricity');
-				IPS_SetVariableProfileText('BLEYC01.ORP', '', ' mV');
-				IPS_SetVariableProfileValues('BLEYC01.ORP', -1000, 1000, 1);
-				IPS_SetVariableProfileDigits('BLEYC01.ORP', 0);
-			}
-			if(!IPS_VariableProfileExists('BLEYC01.EC'))
-			{
-				IPS_CreateVariableProfile('BLEYC01.EC', 1);
-				IPS_SetVariableProfileIcon('BLEYC01.EC', '');
-				IPS_SetVariableProfileText('BLEYC01.EC', '', ' µS/cm');
-				IPS_SetVariableProfileValues('BLEYC01.EC', 0, 2000, 1);
-				IPS_SetVariableProfileDigits('BLEYC01.EC', 0);
-			}
-			if(!IPS_VariableProfileExists('BLEYC01.TDS'))
-			{
-				IPS_CreateVariableProfile('BLEYC01.TDS', 1);
-				IPS_SetVariableProfileIcon('BLEYC01.TDS', 'Snow');
-				IPS_SetVariableProfileText('BLEYC01.TDS', '', ' ppm');
-				IPS_SetVariableProfileValues('BLEYC01.TDS', 0, 2000, 1);
-				IPS_SetVariableProfileDigits('BLEYC01.TDS', 0);
-			}
-			if(!IPS_VariableProfileExists('BLEYC01.Chlorine'))
-			{
-				IPS_CreateVariableProfile('BLEYC01.Chlorine', 2);
-				IPS_SetVariableProfileIcon('BLEYC01.Chlorine', 'ErlenmeyerFlask');
-				IPS_SetVariableProfileText('BLEYC01.Chlorine', '', ' mg/l');
-				IPS_SetVariableProfileValues('BLEYC01.Chlorine', 0, 10, 0.1);
-				IPS_SetVariableProfileDigits('BLEYC01.Chlorine', 1);
-			}
-
-
-			$this->RegisterVariableInteger(self::Battery, $this->Translate(self::Battery), "~Battery.100", 100);
-			$this->RegisterVariableInteger(self::EC, "EC", "BLEYC01.EC", 40);
-			$this->RegisterVariableInteger(self::TDS, "TDS", "BLEYC01.TDS", 50);
-			$this->RegisterVariableFloat(self::PH, "PH", "~Liquid.pH.F", 20);
-			$this->RegisterVariableFloat(self::ORP, "ORP", "BLEYC01.ORP", 60);
 			$this->RegisterVariableFloat(self::Temperature, $this->Translate(self::Temperature), "~Temperature", 10);
-			$this->RegisterVariableFloat(self::Chlorine, $this->Translate(self::Chlorine), "BLEYC01.Chlorine", 70);
-			$this->RegisterVariableBoolean(self::Status, self::Status, "~Alert", 0);
-			$this->RegisterVariableBoolean(self::Active, $this->Translate(self::Active), "~Switch", 0);
+
+			$this->RegisterPH(20);
+			$this->RegisterChlorine(30);
+			$this->RegisterORP(40);
+			$this->RegisterTDS(50);
+			$this->RegisterEC(60);
+			
+			$this->RegisterVariableInteger(self::DataTimestamp, $this->Translate(self::DataTimestamp), "~UnixTimestamp", 90);
+			$this->RegisterVariableInteger(self::Battery, $this->Translate(self::Battery), "~Battery.100", 100);		
+			$this->RegisterVariableBoolean(self::Status, self::Status, "~Alert", 110);			
+			$this->RegisterVariableBoolean(self::Active, $this->Translate(self::Active), "~Switch", 120);
 
 			$this->ConnectParent(self::MqttParent);
 		}
@@ -118,6 +92,10 @@ declare(strict_types=1);
 			$interval = $this->ReadPropertyInteger('RequestInterval') * 1000 * 60;
 			$this->SetTimerInterval('RequestTimer', $interval);
 			$this->SendDebug('RequestTimer', 'Interval: ' . $interval . ' ms', 0);
+			if($this->GetValue(self::DataTimestamp) != 0)
+			{
+				$this->SetValue(self::DataTimestamp, 0);
+			}
 
 			$this->SetStatus(102);
 		}
@@ -247,6 +225,7 @@ declare(strict_types=1);
 			$this->SetValue(self::Temperature, $temperature);
 			$this->SetValue(self::Status, false);
 			$this->SetValue(self::Chlorine, $cloro);
+			$this->SetValue(self::DataTimestamp, time());
 
 			$this->SendDebug('ParsePayloadAndApplyData', "Finish.", 0);
 		}		
@@ -322,5 +301,102 @@ declare(strict_types=1);
 		function decode_position(array $decodedData, int $idx) 
 		{
 			return $this->reverse_bytes(array_slice($decodedData, $idx, 2));
+		}
+
+		function RegisterPH(int $position)
+		{
+			if(IPS_VariableProfileExists('BLEYC01.PH'))
+				IPS_RemoveVariableProfile('BLEYC01.PH');
+
+			IPS_CreateVariableProfile('BLEYC01.PH', 2);
+			IPS_SetVariableProfileIcon('BLEYC01.PH', 'ErlenmeyerFlask');
+			IPS_SetVariableProfileText('BLEYC01.PH', '', ' pH');
+			IPS_SetVariableProfileValues('BLEYC01.PH', 0, 14, 0.1);
+			IPS_SetVariableProfileDigits('BLEYC01.PH', 1);
+			IPS_SetVariableProfileAssociation('BLEYC01.PH', 0, '', '', self::RedValue);
+			IPS_SetVariableProfileAssociation('BLEYC01.PH', 6.5, '', '', self::YellowValue);
+			IPS_SetVariableProfileAssociation('BLEYC01.PH', 7.0, '', '', self::GreenValue);
+			IPS_SetVariableProfileAssociation('BLEYC01.PH', 7.5, '', '', self::YellowValue);
+			IPS_SetVariableProfileAssociation('BLEYC01.PH', 8, '', '', self::RedValue);
+		
+			$this->RegisterVariableFloat(self::PH, $this->Translate(self::PH), "BLEYC01.PH", $position);
+		}
+
+		function RegisterChlorine(int $position)
+		{
+			if(IPS_VariableProfileExists('BLEYC01.Chlorine'))
+				IPS_RemoveVariableProfile('BLEYC01.Chlorine');
+
+			IPS_CreateVariableProfile('BLEYC01.Chlorine', 2);
+			IPS_SetVariableProfileIcon('BLEYC01.Chlorine', 'ErlenmeyerFlask');
+			IPS_SetVariableProfileText('BLEYC01.Chlorine', '', ' mg/l');
+			IPS_SetVariableProfileValues('BLEYC01.Chlorine', 0, 10, 0.1);
+			IPS_SetVariableProfileDigits('BLEYC01.Chlorine', 1);
+			IPS_SetVariableProfileAssociation('BLEYC01.Chlorine', 0, '', '', self::RedValue);
+			IPS_SetVariableProfileAssociation('BLEYC01.Chlorine', 0.5, '', '', self::GreenValue);
+			IPS_SetVariableProfileAssociation('BLEYC01.Chlorine', 1.1, '', '', self::YellowValue);
+			IPS_SetVariableProfileAssociation('BLEYC01.Chlorine', 2.1, '', '', self::RedValue);
+		
+			$this->RegisterVariableFloat(self::Chlorine, $this->Translate(self::Chlorine), "BLEYC01.Chlorine", $position);
+		}
+
+		function RegisterTDS(int $position)
+		{
+			if(IPS_VariableProfileExists('BLEYC01.TDS'))
+				IPS_RemoveVariableProfile('BLEYC01.TDS');
+
+			IPS_CreateVariableProfile('BLEYC01.TDS', 1);
+			IPS_SetVariableProfileIcon('BLEYC01.TDS', 'Snow');
+			IPS_SetVariableProfileText('BLEYC01.TDS', '', ' ppm');
+			IPS_SetVariableProfileValues('BLEYC01.TDS', 0, 2000, 1);
+			IPS_SetVariableProfileDigits('BLEYC01.TDS', 0);
+
+			IPS_SetVariableProfileAssociation('BLEYC01.TDS', 0, '', '', self::RedValue);
+			IPS_SetVariableProfileAssociation('BLEYC01.TDS', 40, '', '', self::YellowValue);
+			IPS_SetVariableProfileAssociation('BLEYC01.TDS', 80, '', '', self::GreenValue);
+			IPS_SetVariableProfileAssociation('BLEYC01.TDS', 121, '', '', self::YellowValue);
+			IPS_SetVariableProfileAssociation('BLEYC01.TDS', 200, '', '', self::RedValue);
+					
+			$this->RegisterVariableInteger(self::TDS, "TDS", "BLEYC01.TDS", $position);
+		}
+
+		function RegisterEC(int $position)
+		{
+			if(IPS_VariableProfileExists('BLEYC01.EC'))
+				IPS_RemoveVariableProfile('BLEYC01.EC');
+
+			IPS_CreateVariableProfile('BLEYC01.EC', 1);
+			IPS_SetVariableProfileIcon('BLEYC01.EC', '');
+			IPS_SetVariableProfileText('BLEYC01.EC', '', ' µS/cm');
+			IPS_SetVariableProfileValues('BLEYC01.EC', 0, 2000, 1);
+			IPS_SetVariableProfileDigits('BLEYC01.EC', 0);
+
+			// IPS_SetVariableProfileAssociation('BLEYC01.EC', 0, '', '', self::RedValue);
+			// IPS_SetVariableProfileAssociation('BLEYC01.EC', 3, '', '', self::GreeValue);
+			// IPS_SetVariableProfileAssociation('BLEYC01.EC', 16, '', '', self::YellowValue);
+			// IPS_SetVariableProfileAssociation('BLEYC01.EC', 30, '', '', self::RedValue);
+		
+			$this->RegisterVariableInteger(self::EC, "EC", "BLEYC01.EC", $position);
+		}
+
+		function RegisterORP(int $position)
+		{
+			if (IPS_VariableProfileExists('BLEYC01.ORP')) {
+				IPS_RemoveVariableProfile('BLEYC01.ORP');
+			}
+
+			IPS_CreateVariableProfile('BLEYC01.ORP', 2);
+			IPS_SetVariableProfileIcon('BLEYC01.ORP', 'Electricity');
+			IPS_SetVariableProfileText('BLEYC01.ORP', '', ' mV');
+			IPS_SetVariableProfileValues('BLEYC01.ORP', -1000, 1000, 1);
+			IPS_SetVariableProfileDigits('BLEYC01.ORP', 0);
+
+			IPS_SetVariableProfileAssociation('BLEYC01.ORP', -1000, '', '', self::RedValue);
+			IPS_SetVariableProfileAssociation('BLEYC01.ORP', 399, '', '', self::YellowValue);
+			IPS_SetVariableProfileAssociation('BLEYC01.ORP', 600, '', '', self::GreenValue);
+			IPS_SetVariableProfileAssociation('BLEYC01.ORP', 801, '', '', self::YellowValue);
+			IPS_SetVariableProfileAssociation('BLEYC01.ORP', 1000, '', '', self::RedValue);
+
+			$this->RegisterVariableFloat(self::ORP, "ORP", "BLEYC01.ORP", $position);
 		}
 	}
