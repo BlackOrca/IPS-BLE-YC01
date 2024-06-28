@@ -69,7 +69,11 @@ declare(strict_types=1);
 		public function ApplyChanges()
 		{
 			//Never delete this line!
-			parent::ApplyChanges();
+			parent::ApplyChanges();			
+			
+			$filterResult = preg_quote('"Topic":"' . self::ResponseTopic . '/' . $this->ReadPropertyString('TasmotaDeviceName') . '/' . self::BleResultPostfix);	
+			$this->SendDebug('ReceiveDataFilter', '.*' . $filterResult . '.*', 0);
+			$this->SetReceiveDataFilter('.*' . $filterResult . '.*');
 
 			if(!$this->ReadPropertyBoolean('Active'))
 			{
@@ -77,14 +81,10 @@ declare(strict_types=1);
 				$this->SetValue(self::Active, false);			
 				return;
 			}
-			
+
 			$this->SetValue(self::Active, true);	
 			$this->ConnectParent(self::MqttParent);
 			
-			$filterResult = preg_quote('"Topic":"' . self::ResponseTopic . '/' . $this->ReadPropertyString('TasmotaDeviceName') . '/' . self::BleResultPostfix);	
-			$this->SendDebug('ReceiveDataFilter', '.*' . $filterResult . '.*', 0);
-			$this->SetReceiveDataFilter('.*' . $filterResult . '.*');
-
 			if ($this->HasActiveParent() && IPS_GetKernelRunlevel() == KR_READY) {
 				$this->RequestData($_IPS['TARGET']);
 			}		
@@ -132,7 +132,7 @@ declare(strict_types=1);
 				$this->SendDebug('Payload', 'Payload is not an array', 0);
 				return;
 			}
-			
+
 			if(!array_key_exists('BLEOperation', $payload))
 			{
 				$this->SendDebug('Payload', 'No BLEOperation found', 0);
