@@ -12,12 +12,7 @@
             "Chlorine": "Chlor",
             "Module Active": "Modul Aktiv",
             "BLEYC10": "BLEYC01",
-            "DataTimestamp": "Datenzeitpunkt",
-            "ValueOk": "Wert OK",
-            "ValueLess": "Wert zu niedrig",
-            "ValueToLess": "Wert viel zu niedrig",
-            "ValueHigh": "Wert zu hoch",
-            "ValueToHigh": "Wert viel zu hoch"
+            "DataTimestamp": "Letzter Abruf"
         }
     }
 }
