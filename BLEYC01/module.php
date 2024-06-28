@@ -203,7 +203,7 @@ declare(strict_types=1);
 
 			$productCode = $decodedData[2];
 			//$battery = $this->decode_position($decodedData, 15)/45;
-			$batt = $this->decode_position($decodedData, 15) / 100;
+			$batt = $this->decode_position($decodedData, 15) / 1000;
 			$battery = round(100 * ($this->decode_position($decodedData, 15) - self::BATT_0) / (self::BATT_100 - self::BATT_0));
 			$battery = min(max(0, $battery), 100);
 			$ec = $this->decode_position($decodedData, 5);
