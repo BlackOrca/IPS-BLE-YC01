@@ -314,11 +314,11 @@ declare(strict_types=1);
 			IPS_SetVariableProfileText('BLEYC01.PH', '', ' pH');
 			IPS_SetVariableProfileValues('BLEYC01.PH', 0, 14, 0.1);
 			IPS_SetVariableProfileDigits('BLEYC01.PH', 1);
-			IPS_SetVariableProfileAssociation('BLEYC01.PH', 0.0, '', '', self::RedValue);
-			IPS_SetVariableProfileAssociation('BLEYC01.PH', 6.5, '', '', self::YellowValue);
-			IPS_SetVariableProfileAssociation('BLEYC01.PH', 7.0, '', '', self::GreenValue);
-			IPS_SetVariableProfileAssociation('BLEYC01.PH', 7.5, '', '', self::YellowValue);
-			IPS_SetVariableProfileAssociation('BLEYC01.PH', 8.0, '', '', self::RedValue);
+			IPS_SetVariableProfileAssociation('BLEYC01.PH', 0.0, $this->Translate('ValueToLess'), '', self::RedValue);
+			IPS_SetVariableProfileAssociation('BLEYC01.PH', 6.5, $this->Translate('ValueLess'), '', self::YellowValue);
+			IPS_SetVariableProfileAssociation('BLEYC01.PH', 7.0, $this->Translate('ValueOk'), '', self::GreenValue);
+			IPS_SetVariableProfileAssociation('BLEYC01.PH', 7.5, $this->Translate('ValueHigh'), '', self::YellowValue);
+			IPS_SetVariableProfileAssociation('BLEYC01.PH', 8.0, $this->Translate('ValueToHigh'), '', self::RedValue);
 		
 			$this->RegisterVariableFloat(self::PH, $this->Translate(self::PH), "BLEYC01.PH", $position);
 		}
@@ -333,10 +333,10 @@ declare(strict_types=1);
 			IPS_SetVariableProfileText('BLEYC01.Chlorine', '', ' mg/l');
 			IPS_SetVariableProfileValues('BLEYC01.Chlorine', 0, 10, 0.1);
 			IPS_SetVariableProfileDigits('BLEYC01.Chlorine', 1);
-			IPS_SetVariableProfileAssociation('BLEYC01.Chlorine', 0.0, '', '', self::RedValue);
-			IPS_SetVariableProfileAssociation('BLEYC01.Chlorine', 0.5, '', '', self::GreenValue);
-			IPS_SetVariableProfileAssociation('BLEYC01.Chlorine', 1.1, '', '', self::YellowValue);
-			IPS_SetVariableProfileAssociation('BLEYC01.Chlorine', 2.1, '', '', self::RedValue);
+			IPS_SetVariableProfileAssociation('BLEYC01.Chlorine', 0.0, $this->Translate('ValueLess'), '', self::RedValue);
+			IPS_SetVariableProfileAssociation('BLEYC01.Chlorine', 0.5, $this->Translate('ValueOk'), '', self::GreenValue);
+			IPS_SetVariableProfileAssociation('BLEYC01.Chlorine', 1.1, $this->Translate('ValueHigh'), '', self::YellowValue);
+			IPS_SetVariableProfileAssociation('BLEYC01.Chlorine', 2.1, $this->Translate('ValueToHigh'), '', self::RedValue);
 		
 			$this->RegisterVariableFloat(self::Chlorine, $this->Translate(self::Chlorine), "BLEYC01.Chlorine", $position);
 		}
@@ -352,11 +352,11 @@ declare(strict_types=1);
 			IPS_SetVariableProfileValues('BLEYC01.TDS', 0, 2000, 1);
 			IPS_SetVariableProfileDigits('BLEYC01.TDS', 0);
 
-			IPS_SetVariableProfileAssociation('BLEYC01.TDS', 0, '', '', self::RedValue);
-			IPS_SetVariableProfileAssociation('BLEYC01.TDS', 40, '', '', self::YellowValue);
-			IPS_SetVariableProfileAssociation('BLEYC01.TDS', 80, '', '', self::GreenValue);
-			IPS_SetVariableProfileAssociation('BLEYC01.TDS', 121, '', '', self::YellowValue);
-			IPS_SetVariableProfileAssociation('BLEYC01.TDS', 200, '', '', self::RedValue);
+			IPS_SetVariableProfileAssociation('BLEYC01.TDS', 0, $this->Translate('ValueToLess'), '', self::RedValue);
+			IPS_SetVariableProfileAssociation('BLEYC01.TDS', 40, $this->Translate('ValueLess'), '', self::YellowValue);
+			IPS_SetVariableProfileAssociation('BLEYC01.TDS', 80, $this->Translate('ValueOk'), '', self::GreenValue);
+			IPS_SetVariableProfileAssociation('BLEYC01.TDS', 121, $this->Translate('ValueHigh'), '', self::YellowValue);
+			IPS_SetVariableProfileAssociation('BLEYC01.TDS', 200, $this->Translate('ValueToHigh'), '', self::RedValue);
 					
 			$this->RegisterVariableInteger(self::TDS, "TDS", "BLEYC01.TDS", $position);
 		}
@@ -391,11 +391,11 @@ declare(strict_types=1);
 			IPS_SetVariableProfileValues('BLEYC01.ORP', -1000, 1000, 1);
 			IPS_SetVariableProfileDigits('BLEYC01.ORP', 0);
 
-			IPS_SetVariableProfileAssociation('BLEYC01.ORP', -1000, '', '', self::RedValue);
-			IPS_SetVariableProfileAssociation('BLEYC01.ORP', 399, '', '', self::YellowValue);
-			IPS_SetVariableProfileAssociation('BLEYC01.ORP', 600, '', '', self::GreenValue);
-			IPS_SetVariableProfileAssociation('BLEYC01.ORP', 801, '', '', self::YellowValue);
-			IPS_SetVariableProfileAssociation('BLEYC01.ORP', 1000, '', '', self::RedValue);
+			IPS_SetVariableProfileAssociation('BLEYC01.ORP', -1000, $this->Translate('ValueToLess'), '', self::RedValue);
+			IPS_SetVariableProfileAssociation('BLEYC01.ORP', 399, $this->Translate('ValueLess'), '', self::YellowValue);
+			IPS_SetVariableProfileAssociation('BLEYC01.ORP', 600, $this->Translate('ValueOk'), '', self::GreenValue);
+			IPS_SetVariableProfileAssociation('BLEYC01.ORP', 801, $this->Translate('ValueHigh'), '', self::YellowValue);
+			IPS_SetVariableProfileAssociation('BLEYC01.ORP', 1000, $this->Translate('ValueToHigh'), '', self::RedValue);
 
 			$this->RegisterVariableFloat(self::ORP, "ORP", "BLEYC01.ORP", $position);
 		}
