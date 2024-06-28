@@ -149,7 +149,7 @@ declare(strict_types=1);
 			{
 				return "OK not for me!";
 			}
-			
+
 
 			//state: DONEREAD
 			//FFA1FE5AFEBFFFFFFF57FFFEFF57F799FBE82FFE03FFFEFFFFFFFF5740
@@ -307,7 +307,7 @@ declare(strict_types=1);
 		function RegisterPH(int $position)
 		{
 			if(IPS_VariableProfileExists('BLEYC01.PH'))
-				IPS_RemoveVariableProfile('BLEYC01.PH');
+				IPS_DeleteVariableProfile('BLEYC01.PH');
 
 			IPS_CreateVariableProfile('BLEYC01.PH', 2);
 			IPS_SetVariableProfileIcon('BLEYC01.PH', 'ErlenmeyerFlask');
@@ -326,7 +326,7 @@ declare(strict_types=1);
 		function RegisterChlorine(int $position)
 		{
 			if(IPS_VariableProfileExists('BLEYC01.Chlorine'))
-				IPS_RemoveVariableProfile('BLEYC01.Chlorine');
+				IPS_DeleteVariableProfile('BLEYC01.Chlorine');
 
 			IPS_CreateVariableProfile('BLEYC01.Chlorine', 2);
 			IPS_SetVariableProfileIcon('BLEYC01.Chlorine', 'ErlenmeyerFlask');
@@ -344,7 +344,7 @@ declare(strict_types=1);
 		function RegisterTDS(int $position)
 		{
 			if(IPS_VariableProfileExists('BLEYC01.TDS'))
-				IPS_RemoveVariableProfile('BLEYC01.TDS');
+				IPS_DeleteVariableProfile('BLEYC01.TDS');
 
 			IPS_CreateVariableProfile('BLEYC01.TDS', 1);
 			IPS_SetVariableProfileIcon('BLEYC01.TDS', 'Snow');
@@ -364,7 +364,7 @@ declare(strict_types=1);
 		function RegisterEC(int $position)
 		{
 			if(IPS_VariableProfileExists('BLEYC01.EC'))
-				IPS_RemoveVariableProfile('BLEYC01.EC');
+				IPS_DeleteVariableProfile('BLEYC01.EC');
 
 			IPS_CreateVariableProfile('BLEYC01.EC', 1);
 			IPS_SetVariableProfileIcon('BLEYC01.EC', '');
@@ -382,9 +382,8 @@ declare(strict_types=1);
 
 		function RegisterORP(int $position)
 		{
-			if (IPS_VariableProfileExists('BLEYC01.ORP')) {
-				IPS_RemoveVariableProfile('BLEYC01.ORP');
-			}
+			if (IPS_VariableProfileExists('BLEYC01.ORP')) 
+				IPS_DeleteVariableProfile('BLEYC01.ORP');			
 
 			IPS_CreateVariableProfile('BLEYC01.ORP', 2);
 			IPS_SetVariableProfileIcon('BLEYC01.ORP', 'Electricity');
