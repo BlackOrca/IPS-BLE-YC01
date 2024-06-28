@@ -148,7 +148,8 @@ declare(strict_types=1);
 			if($payload['BLEOperation']['MAC'] != $mac)
 			{
 				return "OK not for me!";
-			}		
+			}
+			
 
 			//state: DONEREAD
 			//FFA1FE5AFEBFFFFFFF57FFFEFF57F799FBE82FFE03FFFEFFFFFFFF5740
