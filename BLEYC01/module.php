@@ -126,7 +126,13 @@ declare(strict_types=1);
 				$this->SendDebug('Payload', 'No Payload found', 0);
 				return;
 			}
-
+			
+			if(!is_array($payload))
+			{
+				$this->SendDebug('Payload', 'Payload is not an array', 0);
+				return;
+			}
+			
 			if(!array_key_exists('BLEOperation', $payload))
 			{
 				$this->SendDebug('Payload', 'No BLEOperation found', 0);
