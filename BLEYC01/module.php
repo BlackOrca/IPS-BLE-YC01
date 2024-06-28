@@ -314,11 +314,11 @@ declare(strict_types=1);
 			IPS_SetVariableProfileText('BLEYC01.PH', '', ' pH');
 			IPS_SetVariableProfileValues('BLEYC01.PH', 0, 14, 0.1);
 			IPS_SetVariableProfileDigits('BLEYC01.PH', 1);
-			IPS_SetVariableProfileAssociation('BLEYC01.PH', 0, '', '', self::RedValue);
+			IPS_SetVariableProfileAssociation('BLEYC01.PH', 0.0, '', '', self::RedValue);
 			IPS_SetVariableProfileAssociation('BLEYC01.PH', 6.5, '', '', self::YellowValue);
 			IPS_SetVariableProfileAssociation('BLEYC01.PH', 7.0, '', '', self::GreenValue);
 			IPS_SetVariableProfileAssociation('BLEYC01.PH', 7.5, '', '', self::YellowValue);
-			IPS_SetVariableProfileAssociation('BLEYC01.PH', 8, '', '', self::RedValue);
+			IPS_SetVariableProfileAssociation('BLEYC01.PH', 8.0, '', '', self::RedValue);
 		
 			$this->RegisterVariableFloat(self::PH, $this->Translate(self::PH), "BLEYC01.PH", $position);
 		}
@@ -333,7 +333,7 @@ declare(strict_types=1);
 			IPS_SetVariableProfileText('BLEYC01.Chlorine', '', ' mg/l');
 			IPS_SetVariableProfileValues('BLEYC01.Chlorine', 0, 10, 0.1);
 			IPS_SetVariableProfileDigits('BLEYC01.Chlorine', 1);
-			IPS_SetVariableProfileAssociation('BLEYC01.Chlorine', 0, '', '', self::RedValue);
+			IPS_SetVariableProfileAssociation('BLEYC01.Chlorine', 0.0, '', '', self::RedValue);
 			IPS_SetVariableProfileAssociation('BLEYC01.Chlorine', 0.5, '', '', self::GreenValue);
 			IPS_SetVariableProfileAssociation('BLEYC01.Chlorine', 1.1, '', '', self::YellowValue);
 			IPS_SetVariableProfileAssociation('BLEYC01.Chlorine', 2.1, '', '', self::RedValue);
