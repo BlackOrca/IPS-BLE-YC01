@@ -31,6 +31,7 @@ declare(strict_types=1);
 		const Chlorine = "Chlorine";
 		const Active = "Active";
 		const DataTimestamp = "DataTimestamp";
+		const BatteryVoltage = "BatteryVoltage";
 
 		public function Create()
 		{
@@ -53,7 +54,8 @@ declare(strict_types=1);
 			$this->RegisterEC(60);
 			
 			$this->RegisterVariableInteger(self::DataTimestamp, $this->Translate(self::DataTimestamp), "~UnixTimestamp", 90);
-			$this->RegisterVariableInteger(self::Battery, $this->Translate(self::Battery), "~Battery.100", 100);		
+			$this->RegisterVariableInteger(self::Battery, $this->Translate(self::Battery), "~Battery.100", 100);	
+			$this->RegisterVariableFloat(self::BatteryVoltage, $this->Translate(self::BatteryVoltage), "~Volt", 105);	
 			$this->RegisterVariableBoolean(self::Status, self::Status, "~Alert", 110);			
 			$this->RegisterVariableBoolean(self::Active, $this->Translate(self::Active), "~Switch", 120);
 
@@ -201,6 +203,7 @@ declare(strict_types=1);
 
 			$productCode = $decodedData[2];
 			//$battery = $this->decode_position($decodedData, 15)/45;
+			$batt = $this->decode_position($decodedData, 15) / 100;
 			$battery = round(100 * ($this->decode_position($decodedData, 15) - self::BATT_0) / (self::BATT_100 - self::BATT_0));
 			$battery = min(max(0, $battery), 100);
 			$ec = $this->decode_position($decodedData, 5);
@@ -225,6 +228,7 @@ declare(strict_types=1);
 			}
 
 			$this->SetValue(self::Battery, $battery);
+			$this->SetValue(self::BatteryVoltage, $batt);
 			$this->SetValue(self::EC, $ec);
 			$this->SetValue(self::TDS, $tds);
 			$this->SetValue(self::PH, $ph);
