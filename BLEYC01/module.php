@@ -55,7 +55,9 @@ declare(strict_types=1);
 			
 			$this->RegisterVariableInteger(self::DataTimestamp, $this->Translate(self::DataTimestamp), "~UnixTimestamp", 90);
 			$this->RegisterVariableInteger(self::Battery, $this->Translate(self::Battery), "~Battery.100", 100);	
-			$this->RegisterVariableFloat(self::BatteryVoltage, $this->Translate(self::BatteryVoltage), "~Volt", 105);	
+
+			$this->RegisterBatteryVoltage(105);
+			
 			$this->RegisterVariableBoolean(self::Status, self::Status, "~Alert", 110);			
 			$this->RegisterVariableBoolean(self::Active, $this->Translate(self::Active), "~Switch", 120);
 
@@ -410,5 +412,19 @@ declare(strict_types=1);
 			// IPS_SetVariableProfileAssociation('BLEYC01.ORP', 1000, $this->Translate('ValueToHigh'), '', self::RedValue);
 
 			$this->RegisterVariableFloat(self::ORP, "ORP", "BLEYC01.ORP", $position);
+		}
+
+		function RegisterBatteryVoltage(int $position)
+		{
+			if (IPS_VariableProfileExists('BLEYC01.BatteryVoltage')) 
+				IPS_DeleteVariableProfile('BLEYC01.BatteryVoltage');
+
+			IPS_CreateVariableProfile('BLEYC01.BatteryVoltage', 2);
+			IPS_SetVariableProfileIcon('BLEYC01.BatteryVoltage', 'Battery');
+			IPS_SetVariableProfileText('BLEYC01.BatteryVoltage', '', ' V');
+			IPS_SetVariableProfileValues('BLEYC01.BatteryVoltage', 0, 5, 0.001);
+			IPS_SetVariableProfileDigits('BLEYC01.BatteryVoltage', 3);
+
+			$this->RegisterVariableFloat(self::BatteryVoltage, $this->Translate(self::BatteryVoltage), "BLEYC01.BatteryVoltage", 105);	
 		}
 	}
